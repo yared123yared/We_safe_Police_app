@@ -69,7 +69,8 @@ class _PhoneVerificationState extends State<PhoneVerification> {
               _buildImage(
                 size.height * 0.4,
               ),
-              _buildEnterCodeText(widget.userInfo['phone']),
+              _buildVerifyYourAccount(),
+              _buildEnterCodeText('+251929465849'),
               const SizedBox(
                 height: 20,
               ),
@@ -145,6 +146,18 @@ class _PhoneVerificationState extends State<PhoneVerification> {
   //     ],
   //   );
   // }
+
+  Widget _buildVerifyYourAccount(){
+    return const Center(
+      child: SizedBox(
+        height: 50,
+        child: Text('Verify Your Account',style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 25
+        ),),
+      ),
+    );
+  }
 
   Widget _buildImage(double height) {
     return SizedBox(

@@ -6,6 +6,7 @@ import 'package:wesafepoliceapp/Dataprovider/dataprovider.dart';
 import 'package:wesafepoliceapp/Repository/auth_repository.dart';
 import 'package:wesafepoliceapp/Screens/login/login_screen.dart';
 import 'package:wesafepoliceapp/Screens/otp/otp_screen.dart';
+import 'package:wesafepoliceapp/Screens/resetpassword/reset_passowrd.dart';
 import 'package:wesafepoliceapp/Screens/splash_screen.dart';
 import 'Utils/utils.dart';
 import 'package:http/http.dart' as http;
@@ -29,7 +30,7 @@ class PoliceApp extends StatelessWidget {
         BlocProvider<LoginBloc>(create: (context) => LoginBloc(authRepository: authRepository))
       ],
       child: MaterialApp(
-        initialRoute: PhoneVerification.routeName,
+        initialRoute: ResetPassword.routeName,
         onGenerateRoute: AppRoute.generateRoute,
         theme: ThemeData(
           primaryColor: kPrimaryColor,
