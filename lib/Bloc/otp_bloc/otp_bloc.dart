@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:wesafepoliceapp/Screens/home/homepage.dart';
 import 'package:wesafepoliceapp/Screens/otp/otp_screen.dart';
 
 part 'otp_event.dart';
@@ -11,16 +10,14 @@ part 'otp_state.dart';
 class OtpBloc extends Bloc<OtpEvent, OtpState> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   OtpBloc() : super(OtpInitial()) {
-    on<VerifyPhone>((event, emit) async {
-     await _verifyPhone(event, emit, event.context);
-    });
+    on<VerifyPhone>(_verifyPhone);
     on<SigninWithCredential>(((event, emit) async{
       await _signinWithCredential(event, emit);
     }));
   }
 
  Future _signinWithCredential(SigninWithCredential event,Emitter<OtpState> emit ,) async{
-    emit(OptLoading());
+    emit(OtpLoading());
     try {
       PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
         verificationId: event.verificationId, smsCode: event.codeText);
@@ -36,12 +33,14 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
     }
   }
 
-  Future _verifyPhone(
-      VerifyPhone event, Emitter<OtpState> emit, BuildContext context) async {
-    // debugPrint('The phone number is ${event.phoneNumber}');
+  Future<void> _verifyPhone(
+      VerifyPhone event, Emitter<OtpState> emit) async {
+    debugPrint('The phone number is ${event.phoneNumber}');
 
-    emit(OptLoading());
     try {
+      emit (
+        OtpLoading()
+      );
       await _firebaseAuth.verifyPhoneNumber(
         phoneNumber: "+251" + event.phoneNumber,
         verificationCompleted: (PhoneAuthCredential authCredential) async {
@@ -49,13 +48,12 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
           User? user = FirebaseAuth.instance.currentUser;
           if (authCredential.smsCode != null) {
             try {
-              await user!.linkWithCredential(authCredential).whenComplete(() => null);
-            
+              await user!.linkWithCredential(authCredential);
             } on FirebaseAuthException catch (e) {
               if (e.code == 'provider-already-linked') {
                 try {
                   await _firebaseAuth.signInWithCredential(authCredential);
-                  
+
                 } catch (e) {
                   if (e
                       .toString()
@@ -73,6 +71,7 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
             }
           }
         },
+
         verificationFailed: (exception) {
           debugPrint("The verification error is ${exception.code}");
           if (exception.code == 'invalid-phone-number') {
@@ -82,20 +81,14 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
           emit(OtpError(message));
         },
         codeSent: (String verificationId, int? forceResendingToken) async {
-          debugPrint(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>The verification id is $verificationId");
-           emit(const OtpVerified(''));
-          await Future.delayed(const Duration(seconds: 1),(() {
-             
-          })).whenComplete(() =>  Navigator.of(context).pushReplacementNamed(
-              PhoneVerification.routeName,
-              arguments: event.phoneNumber));
-         
-          
+          // debugPrint(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>The verification id is $verificationId");
+           emit(OtpVerified(verificationId));
         },
         codeAutoRetrievalTimeout: (timeout) async {
           // emit(const OtpError("Timeout"));
         },
       );
+      
     } on FirebaseAuthException catch (e) {
       String message = getMessageFromErrorCode(e.code);
       emit(OtpError(message));

@@ -1,33 +1,78 @@
 {
   "project_info": {
-    "project_number": "398860929872",
-    "project_id": "wesafepoliceapp",
-    "storage_bucket": "wesafepoliceapp.appspot.com"
+    "project_number": "259231501838",
+    "project_id": "wesafe-3df4e",
+    "storage_bucket": "wesafe-3df4e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:398860929872:android:36427d94d00ab0558bfa55",
+        "mobilesdk_app_id": "1:259231501838:android:314baf095fe4fcf9ee365f",
         "android_client_info": {
-          "package_name": "com.hadise.wesafepolice"
+          "package_name": "com.hadise.WeSafeUsers"
         }
       },
       "oauth_client": [
         {
-          "client_id": "398860929872-tet3fapeto60vbr8d59sppabmn9ones2.apps.googleusercontent.com",
+          "client_id": "259231501838-9len7vammto47u2blktso6asqlendjpv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hadise.WeSafeUsers",
+            "certificate_hash": "9477feee0728d2bf7a8c644f28e7138e1fc596ba"
+          }
+        },
+        {
+          "client_id": "259231501838-sqmag0kfbfo20mg95gr0cr5bohhm707m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hadise.WeSafeUsers",
+            "certificate_hash": "cb1aa828d95c74968ce080050f4bde01916d01e5"
+          }
+        },
+        {
+          "client_id": "259231501838-ln8jbhfcbvubuoj54i1o2ngsoh2ur8ks.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA2csrWABqLvzYBpO307SguWRHaEQXyWzY"
+          "current_key": "AIzaSyCxwjN_WU3U4c9MuTsNFNuRETQ74aZ1Njc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "398860929872-tet3fapeto60vbr8d59sppabmn9ones2.apps.googleusercontent.com",
+              "client_id": "259231501838-ln8jbhfcbvubuoj54i1o2ngsoh2ur8ks.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:259231501838:android:dcfcd0d85e53f47aee365f",
+        "android_client_info": {
+          "package_name": "com.hadise.wesafepolice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "259231501838-ln8jbhfcbvubuoj54i1o2ngsoh2ur8ks.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxwjN_WU3U4c9MuTsNFNuRETQ74aZ1Njc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "259231501838-ln8jbhfcbvubuoj54i1o2ngsoh2ur8ks.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

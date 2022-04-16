@@ -9,7 +9,7 @@ abstract class OtpState extends Equatable {
 
 class OtpInitial extends OtpState {}
 
-class OptLoading extends OtpState{}
+class OtpLoading extends OtpState{}
 
 class OtpVerified extends OtpState{
  final  String message;

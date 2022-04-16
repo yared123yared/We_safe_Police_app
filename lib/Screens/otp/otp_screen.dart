@@ -60,93 +60,90 @@ class _PhoneVerificationState extends State<PhoneVerification> {
 
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
-      body: BlocConsumer<OtpBloc, OtpState>(
-          listener: (context, state) {
-            if(state is OptLoading){
-               showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (_) => AlertDialog(
-                  content: Row(
-                    children: const [
-                      CircularProgressIndicator(),
-                      SizedBox(width: 10),
-                      Text('verifying')
-                    ],
-                  ),
-                ),
-              );
-            }else if( state is OtpError){
-              Navigator.of(context).pop();
-              debugPrint("error occured");
-            }
-          },
-          
-          builder: (context, state) {
-            return SizedBox(
-              height: size.height,
-              width: size.width,
-              child: ListView(
-                children: <Widget>[
-                  _buildImage(
-                    size.height * 0.4,
-                  ),
-                  _buildVerifyYourAccount(),
-                  _buildEnterCodeText('+251929465849'),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  EnterCodeField(
-                    errorController: errorController,
-                    formKey: formKey,
-                    onChanged: (value) {
-                      debugPrint(value);
-                      setState(() {
-                        currentText = value;
-                      });
-                    },
-                    otpController: otpController,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  _pleaseFillAllCell(),
-                  const SizedBox(
-                    height: 14,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                    ),
-                    child: CustomeButton(
-                        child: const Text(
-                          "VERIFY",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () {
-                          formKey.currentState!.validate();
-                          // conditions for validating
-                          if (currentText.length != 6) {
-                            errorController!.add(ErrorAnimationType
-                                .shake); // Triggering error shake animation
-                            setState(() => hasError = true);
-                          }else{
-                            setState(() => hasError = false);
-                            debugPrint('code inserted successfully');
-                            debugPrint(state.toString());
-                            if(state is OtpVerified){
-                              context.read<OtpBloc>().add(
-                                SigninWithCredential(codeText: currentText, verificationId: state.message)
-                              );
-                              
-                            }
-                          }
-                        }),
-                  ),
+      body: BlocConsumer<OtpBloc, OtpState>(listener: (context, state) {
+        if (state is OtpLoading) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => AlertDialog(
+              content: Row(
+                children: const [
+                  CircularProgressIndicator(),
+                  SizedBox(width: 10),
+                  Text('verifying')
                 ],
               ),
-            );
-          }),
+            ),
+          );
+        } else if (state is OtpError) {
+          Navigator.of(context).pop();
+          debugPrint("error occured");
+        }
+      }, builder: (context, state) {
+        return SizedBox(
+          height: size.height,
+          width: size.width,
+          child: ListView(
+            children: <Widget>[
+              _buildImage(
+                size.height * 0.4,
+              ),
+              _buildVerifyYourAccount(),
+              _buildEnterCodeText('+251929465849'),
+              const SizedBox(
+                height: 20,
+              ),
+              EnterCodeField(
+                errorController: errorController,
+                formKey: formKey,
+                onChanged: (value) {
+                  debugPrint(value);
+                  setState(() {
+                    currentText = value;
+                  });
+                },
+                otpController: otpController,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              _pleaseFillAllCell(),
+              const SizedBox(
+                height: 14,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                ),
+                child: CustomeButton(
+                    child: const Text(
+                      "VERIFY",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      formKey.currentState!.validate();
+                      // conditions for validating
+                      if (currentText.length != 6) {
+                        errorController!.add(ErrorAnimationType
+                            .shake); // Triggering error shake animation
+                        setState(() => hasError = true);
+                      } else {
+                        setState(() => hasError = false);
+                        debugPrint('code inserted successfully');
+                        debugPrint(state.toString());
+                        if (state is OtpVerified) {
+                          context.read<OtpBloc>().add(SigninWithCredential(
+                                codeText: currentText,
+                                verificationId: state.message,
+                              ));
+                        }
+                      }
+                    }),
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 
