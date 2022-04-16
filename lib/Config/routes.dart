@@ -15,7 +15,8 @@ class AppRoute{
       return MaterialPageRoute(builder: (context) => const  PoliceHomepage());
     }
     else if(settings.name == PhoneVerification.routeName){
-      return MaterialPageRoute(builder: (context) => const PhoneVerification({}));
+      String _phoneNumber = settings.arguments as String;
+      return MaterialPageRoute(builder: (context) =>  PhoneVerification( _phoneNumber ));
     }
     else if(settings.name == ResetPassword.routeName){
       return MaterialPageRoute(builder: (context) => const ResetPassword());

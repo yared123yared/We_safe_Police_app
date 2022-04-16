@@ -17,6 +17,7 @@ class PoliceHomepage extends StatefulWidget {
 }
 
 class _PoliceHomepageState extends State<PoliceHomepage> {
+
   @override
   void initState() {
     super.initState();
@@ -24,12 +25,12 @@ class _PoliceHomepageState extends State<PoliceHomepage> {
   }
 
   _getUserInfo() async {
-    UserPreference _userPreferences = UserPreference();
-    LoginInfo _loginInfo = await _userPreferences.getLoginInformation();
-    debugPrint('User token is ${_loginInfo.token}');
-    debugPrint('User name is ${_loginInfo.person!.firstName}');
-    debugPrint('User add is ${_loginInfo.person!.lastName}');
-    debugPrint('User Picture is ${_loginInfo.person!.picture}');
+    // UserPreference _userPreferences = UserPreference();
+    // LoginInfo _loginInfo = await _userPreferences.getLoginInformation();
+    // debugPrint('User token is ${_loginInfo.token}');
+    // debugPrint('User name is ${_loginInfo.person!.firstName}');
+    // debugPrint('User add is ${_loginInfo.person!.lastName}');
+    // debugPrint('User Picture is ${_loginInfo.person!.picture}');
   }
 
  int  _currentIndex = 0;
@@ -49,18 +50,10 @@ class _PoliceHomepageState extends State<PoliceHomepage> {
    }
  }
 
-  @override
-  Widget build(BuildContext context) {
-    
-    debugPrint("Home page");
-    return DefaultTabController(
-      length: 4,
-      child: Scaffold(
-        backgroundColor: const  Color(0xffede8e8),
-        appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white,
-          title: Row(children: [
+ _buildAppBarTitle(index){
+   switch(index){
+     case 0:
+     return Row(children: [
             GestureDetector(
               onTap: () {},
               child: const Icon(
@@ -77,10 +70,55 @@ class _PoliceHomepageState extends State<PoliceHomepage> {
                 size: 30,
               ),
             ),
-          ]),
-    
+          ]);
+    case 1:
+      return const Text("Live", style: TextStyle(color: kIconColor),) ;
+    case 2:
+      return const Text('Report', style: TextStyle(color: kIconColor));
+    case 3:
+      return const Text('History', style: TextStyle(color: kIconColor));
+    default:
+    return Row(children: [
+            GestureDetector(
+              onTap: () {},
+              child: const Icon(
+                Icons.notifications,
+                color: kIconColor,
+                size: 30.0,
+              ),
+            ),
+            GestureDetector(
+              onTap: () {},
+              child: const Icon(
+                Icons.search,
+                color: kIconColor,
+                size: 30,
+              ),
+            ),
+          ]);
+   }
+ }
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 4,
+      child: Scaffold(
+        backgroundColor: const  Color(0xffede8e8),
+        appBar: AppBar(
+          elevation: 0.0,
+          backgroundColor: Colors.white,
+          title: _buildAppBarTitle(_currentIndex),
           actions: [
-           
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () async{
+                UserPreference userPreference = UserPreference();
+                  userPreference.removeLoginInfo();
+              }
+            ),
             IconButton(
               padding: const EdgeInsets.only(right: 10),
               onPressed: (){}, icon: const Icon(

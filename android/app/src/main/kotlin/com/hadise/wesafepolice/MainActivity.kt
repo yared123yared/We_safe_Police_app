@@ -1,4 +1,4 @@
-package com.example.wesafepoliceapp
+package com.hadise.wesafepolice
 
 import io.flutter.embedding.android.FlutterActivity
 

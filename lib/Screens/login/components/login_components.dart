@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:wesafepoliceapp/Bloc/login_bloc/login_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wesafepoliceapp/Bloc/otp_bloc/otp_bloc.dart';
 
 class LoginComponents {
   Widget loginForm(
@@ -28,7 +29,7 @@ class LoginComponents {
             validator: (value) {
               if (value!.isEmpty) {
                 return 'Phone is Required!';
-              } else if (value.length < 10) {
+              } else if (value.length < 9) {
                 return 'Phone number should greater than 10';
               }
               return null;
@@ -78,13 +79,18 @@ class LoginComponents {
               onPressed: () {
                 formKey.currentState!.save();
                 if (formKey.currentState!.validate()) {
-                  SchedulerBinding.instance!.addPostFrameCallback((_) {
-                    LoginEvent _loginEvent = LoginSubmitted(
-                      password: passwordController.text,
-                      phone: phoneController.text,
-                    );
-                    context.read<LoginBloc>().add(_loginEvent);
-                  });
+                  // SchedulerBinding.instance!.addPostFrameCallback((_) {
+                  //   LoginEvent _loginEvent = LoginSubmitted(
+                  //     password: passwordController.text,
+                  //     phone: phoneController.text,
+                  //   );
+                  //   context.read<LoginBloc>().add(_loginEvent);
+                  // });
+
+                  BlocProvider.of<OtpBloc>(context).add(VerifyPhone(
+                    context: context,
+                    phoneNumber: phoneController.text,
+                  ));
                 }
               },
               child: const Text(

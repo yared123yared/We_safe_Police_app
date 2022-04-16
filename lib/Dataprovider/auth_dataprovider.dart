@@ -18,7 +18,7 @@ class AuthDataProvider {
   Future<dynamic> login(String phone, String password) async {
     debugPrint('phone login is $phone');
     debugPrint('password login is $password');
-    
+
     late dynamic _authResponse;
     try {
       final _apiResponse = await httpClient.post(
