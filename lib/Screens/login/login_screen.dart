@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wesafepoliceapp/Bloc/login_bloc/login_bloc.dart';
+import 'package:wesafepoliceapp/Bloc/send_otp_bloc/send_otp_bloc_bloc.dart';
 import 'package:wesafepoliceapp/Screens/home/homepage.dart';
 import 'package:wesafepoliceapp/Screens/login/components/login_components.dart';
 
@@ -81,9 +82,10 @@ class _PoliceLoginpageState extends State<PoliceLoginpage> {
               );
             }
             else if(state is LoginLoadedSuccess){
-              Navigator.of(context).pop();
-              Navigator.of(context).pushReplacementNamed(PoliceHomepage.routeName
-              );
+              // Navigator.of(context).pop();
+              // Navigator.of(context).pushReplacementNamed(PoliceHomepage.routeName
+              // );
+              _sendOtp(phoneNumber: _phoneController.text, context: context);
             }
             else if (state is LoginLoadingError) {
               Navigator.of(context).pop();
@@ -95,4 +97,13 @@ class _PoliceLoginpageState extends State<PoliceLoginpage> {
       ),
     );
   }
+   void _sendOtp({required String phoneNumber, required BuildContext context}) {
+    context.read<SendOtpBlocBloc>().add(
+          SendOtpToPhoneEvent(
+            phoneNumber: phoneNumber,
+            context: context
+          ),
+        );
+  }
+
 }

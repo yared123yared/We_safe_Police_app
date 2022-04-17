@@ -1,12 +1,10 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:provider/provider.dart';
-import 'package:wesafepoliceapp/Bloc/otp_bloc/otp_bloc.dart';
+import 'package:wesafepoliceapp/Bloc/send_otp_bloc/send_otp_bloc_bloc.dart';
+import 'package:wesafepoliceapp/Screens/home/homepage.dart';
 import 'package:wesafepoliceapp/Screens/otp/components/enter_code.dart';
 import 'package:wesafepoliceapp/Widgets/custom_button.dart';
 
@@ -60,8 +58,39 @@ class _PhoneVerificationState extends State<PhoneVerification> {
 
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
-      body: BlocConsumer<OtpBloc, OtpState>(listener: (context, state) {
-        if (state is OtpLoading) {
+      body: BlocListener<SendOtpBlocBloc, SendOtpBlocState>(
+          listener: (context, state) {
+        if (state is PhoneAuthVerified) {
+          WidgetsBinding.instance!.addPostFrameCallback((_) {
+            Navigator.of(context)
+                .pushReplacementNamed(PoliceHomepage.routeName);
+
+            // Add Your Code here.
+          });
+        } else if (state is PhoneAuthError) {
+          Navigator.of(context).pop();
+          debugPrint("error occured");
+          showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+              content: Container(
+                height: 50,
+                width: 200,
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                ),
+                child: Center(
+                  child: Text(
+                    state.error,
+                    style: const TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else if (state is PhoneAuthLoading) {
           showDialog(
             context: context,
             barrierDismissible: false,
@@ -75,11 +104,9 @@ class _PhoneVerificationState extends State<PhoneVerification> {
               ),
             ),
           );
-        } else if (state is OtpError) {
-          Navigator.of(context).pop();
-          debugPrint("error occured");
         }
-      }, builder: (context, state) {
+      }, child: BlocBuilder<SendOtpBlocBloc, SendOtpBlocState>(
+              builder: (context, state) {
         return SizedBox(
           height: size.height,
           width: size.width,
@@ -121,6 +148,8 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                       style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () {
+                      debugPrint('Start verifying');
+                      debugPrint('Start verifying ${currentText.length != 6}');
                       formKey.currentState!.validate();
                       // conditions for validating
                       if (currentText.length != 6) {
@@ -128,14 +157,20 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                             .shake); // Triggering error shake animation
                         setState(() => hasError = true);
                       } else {
-                        setState(() => hasError = false);
-                        debugPrint('code inserted successfully');
-                        debugPrint(state.toString());
-                        if (state is OtpVerified) {
-                          context.read<OtpBloc>().add(SigninWithCredential(
-                                codeText: currentText,
-                                verificationId: state.message,
-                              ));
+                        if (state is PhoneAuthCodeSentSuccess) {
+                          context.read<SendOtpBlocBloc>().add(
+                                VerifySentOtpEvent(
+                                  otpCode: currentText,
+                                  verificationId: state.verificationId,
+                                ),
+                              );
+                        }else if( state is PhoneAuthError){
+                           context.read<SendOtpBlocBloc>().add(
+                                VerifySentOtpEvent(
+                                  otpCode: currentText,
+                                  verificationId: state.error,
+                                ),
+                              );
                         }
                       }
                     }),
@@ -143,36 +178,9 @@ class _PhoneVerificationState extends State<PhoneVerification> {
             ],
           ),
         );
-      }),
+      })),
     );
   }
-
-  _getUser() async {
-    // final userModel = Provider.of<MvvpUserProvider>(context, listen: false);
-    // await userModel.fetchAndSetData();
-  }
-// Widget _buildUser
-  // Widget _buildDidNotRecieveCode(Function() onPressed) {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.center,
-  //     children: [
-  //       const Text(
-  //         "Didn't receive the code? ",
-  //         style: TextStyle(color: Colors.black54, fontSize: 15),
-  //       ),
-  //       TextButton(
-  //         onPressed: onPressed,
-  //         child: const Text(
-  //           "RESEND",
-  //           style: TextStyle(
-  //               color: Colors.lightBlue,
-  //               fontWeight: FontWeight.bold,
-  //               fontSize: 16),
-  //         ),
-  //       )
-  //     ],
-  //   );
-  // }
 
   Widget _buildVerifyYourAccount() {
     return const Center(

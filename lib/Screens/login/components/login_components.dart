@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:wesafepoliceapp/Bloc/login_bloc/login_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wesafepoliceapp/Bloc/otp_bloc/otp_bloc.dart';
+import 'package:wesafepoliceapp/Bloc/send_otp_bloc/send_otp_bloc_bloc.dart';
 
 class LoginComponents {
   Widget loginForm(
@@ -79,18 +79,16 @@ class LoginComponents {
               onPressed: () {
                 formKey.currentState!.save();
                 if (formKey.currentState!.validate()) {
-                  // SchedulerBinding.instance!.addPostFrameCallback((_) {
-                  //   LoginEvent _loginEvent = LoginSubmitted(
-                  //     password: passwordController.text,
-                  //     phone: phoneController.text,
-                  //   );
-                  //   context.read<LoginBloc>().add(_loginEvent);
-                  // });
+                  SchedulerBinding.instance!.addPostFrameCallback((_) {
+                    LoginEvent _loginEvent = LoginSubmitted(
+                      password: passwordController.text,
+                      phone: phoneController.text,
+                    );
+                    context.read<LoginBloc>().add(_loginEvent);
+                  });
 
-                  BlocProvider.of<OtpBloc>(context).add(VerifyPhone(
-                    context: context,
-                    phoneNumber: phoneController.text,
-                  ));
+
+                  
                 }
               },
               child: const Text(

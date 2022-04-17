@@ -13,6 +13,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginSubmitted>((event, emit) async {
       emit( LoginLoading());
       try {
+        
         final _response = await authRepository.login(event.phone, event.password);
         emit(LoginLoadedSuccess(loginInfo: _response));
         

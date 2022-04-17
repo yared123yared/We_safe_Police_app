@@ -113,10 +113,11 @@ class _PoliceHomepageState extends State<PoliceHomepage> {
           title: _buildAppBarTitle(_currentIndex),
           actions: [
             IconButton(
-              icon: const Icon(Icons.logout),
+              icon: const Icon(Icons.logout, color: Colors.grey,),
               onPressed: () async{
                 UserPreference userPreference = UserPreference();
-                  userPreference.removeLoginInfo();
+                  await userPreference.removeLoginInfo();
+                  Navigator.pushNamedAndRemoveUntil(context, PoliceLoginpage.routeName, (route) => false);
               }
             ),
             IconButton(

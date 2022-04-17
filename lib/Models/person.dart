@@ -26,7 +26,9 @@ class Person {
     int? roleId;
     Role? role;
 
-    factory Person.fromJson(Map<String, dynamic> json) => Person(
+    factory Person.fromJson(Map<String, dynamic> json){
+      print('The address is , ${json["address"] }');
+      return Person(
         personId: json["personId"],
         firstName: json["firstName"],
         lastName: json["lastName"],
@@ -34,10 +36,12 @@ class Person {
         phone: json["phone"],
         picture: json["picture"],
         sex: json["sex"],
-        address: json["address"],
+        // address:  json["address"] ?? Address(),
         roleId: json["roleId"],
         role: Role.fromJson(json["role"]),
     );
+
+    }
 
     Map<String, dynamic> toJson() => {
         "personId": personId,
