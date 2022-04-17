@@ -17,12 +17,14 @@ class AuthDataProvider {
 
   Future<dynamic> login(String phone, String password) async {
     debugPrint('phone login is $phone');
-    debugPrint('password login is $password');
+    debugPrint('password login is ${BASE_URL + 'api/persons/authenticate'}');
+
+    debugPrint('The url is $phone');
     
     late dynamic _authResponse;
     try {
       final _apiResponse = await httpClient.post(
-        Uri.parse(BASE_URL + '/api/persons/authenticate'),
+        Uri.parse(BASE_URL + 'api/persons/authenticate'),
         headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

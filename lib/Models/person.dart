@@ -34,7 +34,7 @@ class Person {
         phone: json["phone"],
         picture: json["picture"],
         sex: json["sex"],
-        address: json["address"],
+        // address: json["address"],
         roleId: json["roleId"],
         role: Role.fromJson(json["role"]),
     );
