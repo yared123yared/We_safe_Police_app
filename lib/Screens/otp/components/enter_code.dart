@@ -38,6 +38,7 @@ class EnterCodeField extends StatelessWidget {
               return null;
             }
           },
+          
           pinTheme: PinTheme(
             shape: PinCodeFieldShape.box,
             borderRadius: BorderRadius.circular(5),
