@@ -18,6 +18,7 @@ class PhoneVerification extends StatefulWidget {
 }
 
 class _PhoneVerificationState extends State<PhoneVerification> {
+  String _verificationId = '';
   TextEditingController otpController = TextEditingController();
   // ..text = "123456";
 
@@ -61,11 +62,44 @@ class _PhoneVerificationState extends State<PhoneVerification> {
       body: BlocListener<SendOtpBlocBloc, SendOtpBlocState>(
           listener: (context, state) {
         if (state is PhoneAuthVerified) {
-          WidgetsBinding.instance!.addPostFrameCallback((_) {
-            Navigator.of(context)
-                .pushReplacementNamed(PoliceHomepage.routeName);
-
-            // Add Your Code here.
+          WidgetsBinding.instance!.addPostFrameCallback((_) async {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) => AlertDialog(
+                content: Container(
+                  height: 50,
+                  width: 200,
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                  ),
+                  child: Row(
+                    children: const [
+                      Icon(
+                        Icons.check_circle_outline,
+                        color: Colors.green,
+                        size: 39.0,
+                      ),
+                      SizedBox(width: 20.0),
+                      Center(
+                        child: Text(
+                          "Verified",
+                          style: TextStyle(
+                            color: Colors.green,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+            await Future.delayed(
+              const Duration(seconds: 2),
+            ).whenComplete(() => Navigator.of(context).pushNamedAndRemoveUntil(
+                  PoliceHomepage.routeName,
+                  (route) => false,
+                ));
           });
         } else if (state is PhoneAuthError) {
           Navigator.of(context).pop();
@@ -158,19 +192,24 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                         setState(() => hasError = true);
                       } else {
                         if (state is PhoneAuthCodeSentSuccess) {
+                          setState(() {
+                            _verificationId = state.verificationId;
+                          });
                           context.read<SendOtpBlocBloc>().add(
                                 VerifySentOtpEvent(
                                   otpCode: currentText,
                                   verificationId: state.verificationId,
                                 ),
                               );
-                        }else if( state is PhoneAuthError){
-                           context.read<SendOtpBlocBloc>().add(
-                                VerifySentOtpEvent(
-                                  otpCode: currentText,
-                                  verificationId: state.error,
-                                ),
-                              );
+                        } else if (state is PhoneAuthError) {
+                          if (_verificationId.isNotEmpty) {
+                            context.read<SendOtpBlocBloc>().add(
+                                  VerifySentOtpEvent(
+                                    otpCode: currentText,
+                                    verificationId: _verificationId,
+                                  ),
+                                );
+                          }
                         }
                       }
                     }),
