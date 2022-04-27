@@ -181,11 +181,11 @@ class _PoliceHomepageState extends State<PoliceHomepage> {
               icon: Icon(Icons.live_tv)
               ),
                 BottomNavigationBarItem(
-                  label: "Report",
+                  label: "Alert",
               icon: Icon(Icons.flag_rounded)
               ),
                 BottomNavigationBarItem(
-                  label: "History",
+                  label: "Case",
               icon: Icon(Icons.history)
               ),
               
