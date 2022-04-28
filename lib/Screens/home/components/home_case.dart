@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wesafepoliceapp/Screens/screens.dart';
 
 class HomeHistory extends StatelessWidget {
   const HomeHistory({Key? key}) : super(key: key);
@@ -28,7 +29,11 @@ class HomeHistory extends StatelessWidget {
             ],
           ),
         ),
-        _buildHistoryItem(),
+        GestureDetector(
+          onTap: (){
+            Navigator.of(context).pushNamed(CaseDetail.routeName);
+          },
+          child: _buildHistoryItem()),
         _buildHistoryItem(),
         _buildHistoryItem(),
       ],

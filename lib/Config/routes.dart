@@ -24,6 +24,9 @@ class AppRoute{
     else if(settings.name == ALertDetail.routeName){
       return MaterialPageRoute(builder: ((context) => const ALertDetail()));
     }
+    else if(settings.name == CaseDetail.routeName){
+      return MaterialPageRoute(builder: ((context) => const CaseDetail()));
+    }
     return MaterialPageRoute(
       builder: (context) => const PoliceLoginpage()
       );
