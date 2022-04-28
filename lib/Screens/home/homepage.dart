@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:wesafepoliceapp/Config/user_preference.dart';
 import 'package:wesafepoliceapp/Models/login_info.dart';
-import 'package:wesafepoliceapp/Screens/home/components/home_history.dart';
+import 'package:wesafepoliceapp/Screens/home/components/home_case.dart';
 import 'package:wesafepoliceapp/Screens/home/components/home_live_page.dart';
-import 'package:wesafepoliceapp/Screens/home/components/home_report_page.dart';
+import 'package:wesafepoliceapp/Screens/home/components/home_alert_page.dart';
 import 'package:wesafepoliceapp/Screens/home/components/news_body.dart';
 import 'package:wesafepoliceapp/Screens/login/login_screen.dart';
 import 'package:wesafepoliceapp/Utils/utils.dart';
@@ -106,9 +106,9 @@ class _PoliceHomepageState extends State<PoliceHomepage> {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-        backgroundColor: const  Color(0xffede8e8),
+        backgroundColor: _currentIndex == 2? Colors.white: const  Color(0xffede8e8),
         appBar: AppBar(
-          elevation: 0.0,
+          elevation: _currentIndex == 2? 4: 0.0,
           backgroundColor: Colors.white,
           title: _buildAppBarTitle(_currentIndex),
           actions: [
@@ -181,11 +181,11 @@ class _PoliceHomepageState extends State<PoliceHomepage> {
               icon: Icon(Icons.live_tv)
               ),
                 BottomNavigationBarItem(
-                  label: "Report",
+                  label: "Alert",
               icon: Icon(Icons.flag_rounded)
               ),
                 BottomNavigationBarItem(
-                  label: "History",
+                  label: "Case",
               icon: Icon(Icons.history)
               ),
               
