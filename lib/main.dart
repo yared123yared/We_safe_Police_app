@@ -42,6 +42,7 @@ class PoliceApp extends StatelessWidget {
         initialRoute: PoliceSplashScreen.routeName,
         onGenerateRoute: AppRoute.generateRoute,
         theme: ThemeData(
+          primarySwatch: createMaterialColor(Colors.white),
           primaryColor: kPrimaryColor,
           scaffoldBackgroundColor: Colors.white
         ),
