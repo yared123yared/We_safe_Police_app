@@ -5,3 +5,10 @@ const kDateTimeTextStyle = TextStyle(
   fontSize: 11,
   color: Color(0xff797070),
 );
+
+const kAppbarTextStyle = TextStyle(
+  fontSize: 20.0,
+  fontWeight: FontWeight.bold,
+  color: Colors.grey
+  
+);

@@ -15,17 +15,21 @@ import 'package:http/http.dart' as http;
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  AuthRepository _authrepository = AuthRepository(authDataProvider: AuthDataProvider(httpClient: http.Client()));
+  AuthRepository _authrepository = AuthRepository(
+      authDataProvider: AuthDataProvider(httpClient: http.Client()));
   PhoneAuthRepository phoneAuthRepository = PhoneAuthRepository();
-  runApp( PoliceApp(
+  runApp(PoliceApp(
     authRepository: _authrepository,
     phoneAuthRepository: phoneAuthRepository,
   ));
 }
 
-
 class PoliceApp extends StatelessWidget {
-  const PoliceApp({required this.authRepository, required this.phoneAuthRepository, Key? key }) : super(key: key);
+  const PoliceApp(
+      {required this.authRepository,
+      required this.phoneAuthRepository,
+      Key? key})
+      : super(key: key);
   final AuthRepository authRepository;
   final PhoneAuthRepository phoneAuthRepository;
 
@@ -33,21 +37,19 @@ class PoliceApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<LoginBloc>(create: (context) => LoginBloc(authRepository: authRepository)),
-        BlocProvider<SendOtpBlocBloc>(create: (context) => SendOtpBlocBloc(
-          phoneAuthRepository: phoneAuthRepository
-        ))
+        BlocProvider<LoginBloc>(
+            create: (context) => LoginBloc(authRepository: authRepository)),
+        BlocProvider<SendOtpBlocBloc>(
+            create: (context) =>
+                SendOtpBlocBloc(phoneAuthRepository: phoneAuthRepository))
       ],
       child: MaterialApp(
         initialRoute: PoliceSplashScreen.routeName,
         onGenerateRoute: AppRoute.generateRoute,
         theme: ThemeData(
-          primaryColor: kPrimaryColor,
-          scaffoldBackgroundColor: Colors.white
-        ),
-        home: const PoliceHomepage(
-          
-        ),
+            primarySwatch: createMaterialColor(Colors.blue),
+            primaryColor: kPrimaryColor),
+        home: const PoliceHomepage(),
       ),
     );
   }

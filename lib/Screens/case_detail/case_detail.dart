@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:wesafepoliceapp/Models/case.dart';
 import 'package:wesafepoliceapp/Utils/utils.dart';
 
 class CaseDetail extends StatefulWidget {
-  static const routeName = 'wesafepoliceapp/casedetail';
-
-  const CaseDetail({Key? key}) : super(key: key);
+  static const routeName = 'wesafepoliceapp/caseDetail';
+  const CaseDetail({required this.policeCase, Key? key}) : super(key: key);
+  final Case policeCase;
 
   @override
   State<CaseDetail> createState() => _CaseDetailState();
@@ -15,86 +16,124 @@ class _CaseDetailState extends State<CaseDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
           },
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Color.fromARGB(255, 132, 129, 129),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.policeCase.summary!,
+                        style: const TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        widget.policeCase.openedDate.toString(),
+                        style: kDateTimeTextStyle,
+                      ),
+                    ],
+                  ),
+                  const Icon(
+                    Icons.done_all_outlined,
+                    color: Colors.blue,
+                    size: 25,
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+              Column(
+                children: [
+                  Row(
+                    children: const [
+                      Text('Attachment'),
+                      Icon(
+                        Icons.file_present,
+                        color: Colors.pink,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      _buildImageAndVideos(Icons.videocam, 'Video'),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      _buildImageAndVideos(Icons.photo_library, 'Photo'),
+                    ],
+                  ),
+                  const SizedBox(height: 20.0,),
+                  _buildAudio()
+                ],
+              ),
+
+            ],
           ),
         ),
       ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-        child: Column(children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    'Lorem Ipsum Is',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'Dec 22, 2022',
-                    style: kDateTimeTextStyle,
-                  ),
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.all(3.0),
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.blue,
-                ),
-                child: const Icon(
-                  Icons.question_mark,
+    );
+  }
+
+  Widget _buildImageAndVideos(IconData iconData, String title) {
+    return Expanded(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          color: Colors.grey.shade400,
+        ),
+        height: 120,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children:  [
+            Icon(
+              iconData,
+              color: Colors.white,
+              size: 40.0,
+            ),
+            Text(
+              title,
+              style: const TextStyle(
                   color: Colors.white,
-                  size: 15,
-                ),
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 20.0,
-          ),
-          IntrinsicHeight(
-            child: SizedBox(
-              height: 30.0,
-              child: Row(children: const [
-                VerticalDivider(
-                  color: Colors.blue,
-                  thickness: 3.0,
-                ),
-                Text(
-                  'Description',
-                  style: TextStyle(
-                    fontSize: 17.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              ]),
-            ),
-          ),
-          const SizedBox(
-            height: 20.0,
-          ),
-          const Flexible(
-            child: Text(
-              loremIpsum + loremIpsum,
-              style: TextStyle(
-                height: 1.5,
-              ),
-            ),
-          )
-        ]),
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAudio() {
+    return Container(
+      width: double.infinity,
+      height: 40.0,
+
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0),
+        border: Border.all(
+          color: Colors.black
+        )
+      ),
+      child: Row(
+        children: [
+          
+        ],
       ),
     );
   }

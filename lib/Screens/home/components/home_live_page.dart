@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wesafepoliceapp/Screens/screens.dart';
+import 'package:wesafepoliceapp/Widgets/widgets.dart';
 
 class HomeLive extends StatefulWidget {
   const HomeLive({Key? key}) : super(key: key);
@@ -41,63 +43,14 @@ class _HomeLiveState extends State<HomeLive> {
                     mainAxisSpacing: 10),
                 itemCount: _images.length,
                 itemBuilder: (context, index) {
-                  return Stack(
-                    children: [
-                      Container(
-                        height: 400,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage(_images[index]),
-                                fit: BoxFit.cover)),
-                      ),
-                      Positioned(
-                        left: 10.0,
-                        top: 10.0,
-                        child: Container(
-                          padding: const EdgeInsets.all(3.0),
-                          width: 35,
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(
-                              5.0,
-                            ),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "live",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                          bottom: 10.0,
-                          left: 10.0,
-                          child: Container(
-                            padding: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(
-                                  5.0,
-                                )),
-                            child: Row(children: const [
-                              Text(
-                                '200',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                              SizedBox(width: 10.0),
-                              Text('Viewers',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ))
-                            ]),
-                          ))
-                    ],
+                  return GestureDetector(
+                    onTap:(){
+                      Navigator.of(context).pushNamed(LiveDetail.routeName);
+                    },
+                    child: LiveImage(
+                      image: _images[index],
+                      height: 250,
+                    )
                   );
                 })
           ],
