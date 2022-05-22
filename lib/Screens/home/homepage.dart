@@ -44,7 +44,7 @@ class _PoliceHomepageState extends State<PoliceHomepage> {
      case 2:
      return const HomeReport();
      case 3:
-     return const HomeHistory();
+     return const HomeCase();
      default:
      return const HomeNews();
    }

@@ -17,7 +17,7 @@ class _MapDetailState extends State<MapDetail> {
     return Scaffold(
       appBar: AppBar()
       ,
-      body:  MapLocaton(
+      body: MapLocaton(
         height: size.height ,
       ),
       

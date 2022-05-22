@@ -1,12 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:wesafepoliceapp/Models/case.dart';
 import 'package:wesafepoliceapp/Screens/live_detail/map_detail.dart';
 import 'package:wesafepoliceapp/Screens/login/login_screen.dart';
 import 'package:wesafepoliceapp/Screens/otp/otp_screen.dart';
 import 'package:wesafepoliceapp/Screens/resetpassword/reset_passowrd.dart';
 import 'package:wesafepoliceapp/Screens/screens.dart';
 import 'package:wesafepoliceapp/Screens/splash_screen.dart';
-import 'package:wesafepoliceapp/Widgets/map_location.dart';
 
 class AppRoute {
   static Route generateRoute(RouteSettings settings) {
@@ -25,8 +25,15 @@ class AppRoute {
       return MaterialPageRoute(builder: ((context) => const ALertDetail()));
     } else if (settings.name == LiveDetail.routeName) {
       return MaterialPageRoute(builder: (context) => const LiveDetail());
-    }else if(settings.name == MapDetail.routeName){
+    } else if (settings.name == MapDetail.routeName) {
       return MaterialPageRoute(builder: (context) => const MapDetail());
+    } else if (settings.name == CaseDetail.routeName) {
+      final _policeCase = settings.arguments as Case;
+      return MaterialPageRoute(
+        builder: (context) =>  CaseDetail(
+          policeCase: _policeCase,
+        ),
+      );
     }
     return MaterialPageRoute(builder: (context) => const PoliceLoginpage());
   }
