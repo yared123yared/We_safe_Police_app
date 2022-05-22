@@ -52,12 +52,8 @@ dependencies:
   flutter_svg: ^0.22.0
   change_app_package_name: ^1.0.0
   file_picker: ^4.5.1
-<<<<<<< HEAD
-  
-=======
   google_maps_flutter: ^2.1.4
   json_serializable: ^6.2.0
->>>>>>> WS-119-live-detail-ui-implementation
 
 dev_dependencies:
   flutter_test:
