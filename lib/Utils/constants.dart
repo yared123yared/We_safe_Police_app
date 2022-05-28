@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 // Colors
 const kPrimaryColor = Color(0xFF6F35A5);
 const kPrimaryLightColor = Color(0xFFF1E6FF);
-const kIconColor =   Color(0xffA3A3A3);
+const kIconColor = Color(0xffA3A3A3);
 
 // ignore: constant_identifier_names
 const BASE_URL = 'https://we-safe-development.herokuapp.com/';
-
 
 MaterialColor createMaterialColor(Color color) {
   List strengths = <double>[.05];
@@ -28,3 +27,35 @@ MaterialColor createMaterialColor(Color color) {
   }
   return MaterialColor(color.value, swatch);
 }
+
+class DateFormaterClass {
+
+  static final List<String> months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+  ];
+
+  static String formatDate(String dateString) {
+    DateTime _dateTime = DateTime.parse(dateString); 
+    late String _day;
+    if(_dateTime.day < 10){
+      _day = '0${_dateTime.day}';
+    }else{
+      _day = '${_dateTime.day}';
+    }
+    return '${months[_dateTime.month - 1]} $_day, ${_dateTime.year}';
+  }
+
+}
+
+

@@ -8,19 +8,33 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthRepository authRepository;
-  
+
   LoginBloc({required this.authRepository}) : super(LoginInitial()) {
     on<LoginSubmitted>((event, emit) async {
-      emit( LoginLoading());
+      emit(LoginLoading());
       try {
-        
-        final _response = await authRepository.login(event.phone, event.password);
-        emit(LoginLoadedSuccess(loginInfo: _response));
-        
+        final _response = await authRepository.login(
+          event.phone,
+          event.password,
+        );
+        if (_response.police != null) {
+          emit(
+            LoginLoadedSuccess(loginInfo: _response),
+          );
+        } else {
+          emit(
+            const LoginLoadingError(
+              message: "police does not exit",
+            ),
+          );
+        }
       } catch (e) {
-        emit(LoginLoadingError(message: e.toString()));
+        emit(
+          LoginLoadingError(
+            message: e.toString(),
+          ),
+        );
       }
-     
     });
   }
 }

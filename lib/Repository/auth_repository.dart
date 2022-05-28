@@ -10,8 +10,9 @@ class AuthRepository{
   });
 
   Future<LoginInfo> login(String phone , String password)async{
-    final _apiResponse  = await authDataProvider.login(phone, password);
+    final _apiResponse  = await authDataProvider.login(phone, password);    
     LoginInfo _loginInfo =  LoginInfo.fromJson(_apiResponse);
+    
     UserPreference _userPreference = UserPreference();
     await _userPreference.storeLoginInformation(_loginInfo);
     return _loginInfo;

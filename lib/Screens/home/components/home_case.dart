@@ -6,6 +6,7 @@ import 'package:wesafepoliceapp/Models/models.dart';
 import 'package:wesafepoliceapp/Repository/repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:wesafepoliceapp/Screens/screens.dart';
+import 'package:wesafepoliceapp/Utils/utils.dart';
 
 class HomeCase extends StatefulWidget {
   const HomeCase({Key? key}) : super(key: key);
@@ -149,57 +150,71 @@ class _HomeCaseState extends State<HomeCase> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.refresh,
-                    size: 30,
+            Expanded(
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.refresh,
+                      size: 30,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const VerticalDivider(
                     color: Colors.grey,
                   ),
-                ),
-                const VerticalDivider(
-                  color: Colors.grey,
-                ),
-                SizedBox(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                  Expanded(
+                    child: SizedBox(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            policeCase.summary!,
-                            style: const TextStyle(
-                                height: 1.5,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18.0,
-                                color: Color(0xff494848)),
-                          ),
-                          Text(
-                            policeCase.description!,
-                            style: const TextStyle(
-                              height: 1.5,
-                              color: Color(0xff797070),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    policeCase.summary!,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.visible,
+                                    style: const TextStyle(
+                                        height: 1.5,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18.0,
+                                        color: Color(0xff494848)),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    policeCase.description!,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      height: 1.5,
+                                      color: Color(0xff797070),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  DateFormaterClass.formatDate(policeCase.openedDate.toString()),
+                                  style: const TextStyle(
+                                    height: 1.5,
+                                    fontSize: 11,
+                                    color: Color(0xff797070),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
-                          Text(
-                            policeCase.openedDate.toString(),
-                            style: const TextStyle(
-                              height: 1.5,
-                              fontSize: 11,
-                              color: Color(0xff797070),
-                            ),
-                          )
                         ],
                       ),
-                    ],
-                  ),
-                )
-              ],
+                    ),
+                  )
+                ],
+              ),
             ),
-
+        
             IconButton(
               onPressed: () {
                 // BlocProvider.of<CaseBloc>(context)

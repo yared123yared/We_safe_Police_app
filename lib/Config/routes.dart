@@ -1,8 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:wesafepoliceapp/Models/case.dart';
+import 'package:wesafepoliceapp/Models/new_model.dart';
+import 'package:wesafepoliceapp/Screens/case_detail/case_evidence_add.dart';
 import 'package:wesafepoliceapp/Screens/live_detail/map_detail.dart';
 import 'package:wesafepoliceapp/Screens/login/login_screen.dart';
+import 'package:wesafepoliceapp/Screens/news_widget.dart/news_detail.dart';
 import 'package:wesafepoliceapp/Screens/otp/otp_screen.dart';
 import 'package:wesafepoliceapp/Screens/resetpassword/reset_passowrd.dart';
 import 'package:wesafepoliceapp/Screens/screens.dart';
@@ -30,9 +32,18 @@ class AppRoute {
     } else if (settings.name == CaseDetail.routeName) {
       final _policeCase = settings.arguments as Case;
       return MaterialPageRoute(
-        builder: (context) =>  CaseDetail(
+        builder: (context) => CaseDetail(
           policeCase: _policeCase,
         ),
+      );
+    } else if (settings.name == NewsDetail.routeName) {
+      final _news = settings.arguments as NewsModel;
+      return MaterialPageRoute(
+        builder: (context) => NewsDetail(_news),
+      );
+    } else if (settings.name == CaseEvidenceAdd.routeName) {
+      return MaterialPageRoute(
+        builder: ((context) => const CaseEvidenceAdd()),
       );
     }
     return MaterialPageRoute(builder: (context) => const PoliceLoginpage());
