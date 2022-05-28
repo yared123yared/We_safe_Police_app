@@ -15,15 +15,11 @@ class SendOtpBlocBloc extends Bloc<SendOtpBlocEvent, SendOtpBlocState> {
     required this.phoneAuthRepository,
   }) : super(PhoneAuthInitial()) {
     on<SendOtpToPhoneEvent>(_onSendOtp);
-
     on<VerifySentOtpEvent>(_onVerifyOtp);
-
     on<OnPhoneOtpSent>((event, emit) =>
         emit(PhoneAuthCodeSentSuccess(verificationId: event.verificationId)));
-
     on<OnPhoneAuthErrorEvent>(
         (event, emit) => emit(PhoneAuthError(error: event.error)));
-
     on<OnPhoneAuthVerificationCompleteEvent>(_loginWithCredential);
   }
   Future<void> _onSendOtp(
