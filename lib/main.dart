@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wesafepoliceapp/Bloc/case_bloc/case_bloc.dart';
 import 'package:wesafepoliceapp/Bloc/fileupload_bloc/fileupload_bloc.dart';
 import 'package:wesafepoliceapp/Bloc/login_bloc/login_bloc.dart';
 import 'package:wesafepoliceapp/Bloc/news_bloc/news_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:wesafepoliceapp/Config/routes.dart';
 import 'package:wesafepoliceapp/Dataprovider/dataprovider.dart';
 import 'package:wesafepoliceapp/Dataprovider/news_data_provider.dart';
 import 'package:wesafepoliceapp/Repository/auth_repository.dart';
+import 'package:wesafepoliceapp/Repository/case_respository.dart';
 import 'package:wesafepoliceapp/Repository/news_repository.dart';
 import 'package:wesafepoliceapp/Repository/phone_auth_repository.dart';
 import 'package:wesafepoliceapp/Screens/home/homepage.dart';
@@ -25,10 +27,16 @@ Future main() async {
 
   NewsRespository _newsRespository = NewsRespository(
       dataProvider: NewsDataProvider(httpClient: http.Client()));
+  final _repository = CaseRepository(
+      dataProvider: CaseDataProvider(
+        httpClient: http.Client(),
+      ),
+    );
   runApp(PoliceApp(
     authRepository: _authrepository,
     phoneAuthRepository: phoneAuthRepository,
     newsRespository: _newsRespository,
+    caseRepository: _repository,
   ));
 }
 
@@ -37,11 +45,13 @@ class PoliceApp extends StatelessWidget {
       {required this.authRepository,
       required this.phoneAuthRepository,
       required this.newsRespository,
+      required this.caseRepository,
       Key? key})
       : super(key: key);
   final AuthRepository authRepository;
   final PhoneAuthRepository phoneAuthRepository;
   final NewsRespository newsRespository;
+  final CaseRepository caseRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +70,10 @@ class PoliceApp extends StatelessWidget {
         ),
         BlocProvider<FileuploadBloc>(
           create: (context) => FileuploadBloc(),
+        ),
+        BlocProvider<CaseBloc>(
+          lazy: false,
+          create: (context) => CaseBloc(repository: caseRepository,),
         )
       ],
       child: MaterialApp(

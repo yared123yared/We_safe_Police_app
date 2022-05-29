@@ -29,14 +29,14 @@ class Person {
     factory Person.fromJson(Map<String, dynamic> json){
       print('The address is , ${json["address"] }');
       return Person(
-        personId: json["personId"],
+        personId: json["id"],
         firstName: json["firstName"],
         lastName: json["lastName"],
         password: json["password"],
         phone: json["phone"],
         picture: json["picture"],
         sex: json["sex"],
-        // address:  json["address"] ?? Address(),
+        address:  Address.fromJson(json["address"]),
         roleId: json["roleId"],
         role: Role.fromJson(json["role"]),
     );

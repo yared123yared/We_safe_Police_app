@@ -118,10 +118,10 @@ class _HomeCaseState extends State<HomeCase> {
               ),
             );
           } else {
-            late CaseState _caseState = state;
+            late CaseError _caseState = state as CaseError;
             return Center(
               child: Text(
-                _caseState.toString(),
+                _caseState.errorMessage,
                 style: const TextStyle(color: Colors.red),
               ),
             );

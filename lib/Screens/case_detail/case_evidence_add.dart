@@ -3,11 +3,14 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wesafepoliceapp/Bloc/case_bloc/case_bloc.dart';
 import 'package:wesafepoliceapp/Bloc/fileupload_bloc/fileupload_bloc.dart';
+import 'package:wesafepoliceapp/Models/case.dart';
 
 class CaseEvidenceAdd extends StatefulWidget {
   static const routeName = 'wesafepoliceapp/caseevidenceadd';
-  const CaseEvidenceAdd({Key? key}) : super(key: key);
+  const CaseEvidenceAdd({required this.caseModel, Key? key}) : super(key: key);
+  final Case caseModel;
 
   @override
   State<CaseEvidenceAdd> createState() => CaseEvidenceAddState();
@@ -17,31 +20,42 @@ class CaseEvidenceAddState extends State<CaseEvidenceAdd> {
   File? imageFile;
   File? videoFile;
   File? voiceFile;
+  String _description = '';
+
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Evidence'),
       ),
-      body: BlocListener<FileuploadBloc, FileuploadState>(
+      body: BlocListener<CaseBloc, CaseState>(
         listener: (context, state) {
-          if(state is FileuploadLoading){
+          if (state is CaseLoading) {
             showDialog(
-              context: context, builder: (context) => Container(
-                decoration:  BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10.0)
-                ),
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => AlertDialog(
+                  content: Container(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                width: size.width - 40,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0)),
                 child: Row(
                   children: const [
                     CircularProgressIndicator(),
-                    SizedBox(width: 40.0,),
+                    SizedBox(
+                      width: 40.0,
+                    ),
                     Text('Loading')
                   ],
                 ),
-              )
-              
+              )),
             );
+          } else {
+            Navigator.of(context).pop();
           }
         },
         child: SingleChildScrollView(
@@ -65,168 +79,176 @@ class CaseEvidenceAddState extends State<CaseEvidenceAdd> {
                 const SizedBox(
                   height: 10.0,
                 ),
-                FormWrapper(
-                  onPressed: () async {
-                    try {
-                      final _file = await _pickFile(
-                        ['png', 'jpeg', 'jpg'],
-                      );
-                      setState(() {
-                        imageFile = _file;
-                      });
-                    } catch (e) {
-                      debugPrint("The error is ==================>");
-                      debugPrint(e.toString());
-                    }
-                  },
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 20.0,
-                    horizontal: 20.0,
-                  ),
-                  child: imageFile == null
-                      ? Row(
-                          children: const [
-                            Icon(
-                              Icons.add_a_photo,
+                Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        FormWrapper(
+                          onPressed: () async {
+                            try {
+                              final _file = await _pickFile(
+                                ['png', 'jpeg', 'jpg'],
+                              );
+                              setState(() {
+                                imageFile = _file;
+                              });
+                            } catch (e) {
+                              debugPrint("The error is ==================>");
+                              debugPrint(e.toString());
+                            }
+                          },
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 20.0,
+                            horizontal: 20.0,
+                          ),
+                          child: imageFile == null
+                              ? Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.add_a_photo,
+                                    ),
+                                    SizedBox(
+                                      width: 30.0,
+                                    ),
+                                    Text(
+                                      'Add Photo',
+                                    )
+                                  ],
+                                )
+                              : _buildPlaceHolder(
+                                  imageFile!,
+                                  Image.file(
+                                    imageFile!,
+                                    width: 40,
+                                    height: 40.0,
+                                  ), () {
+                                  setState(() {
+                                    imageFile = null;
+                                  });
+                                }),
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        FormWrapper(
+                          padding: const EdgeInsets.all(20.0),
+                          child: videoFile == null
+                              ? Row(
+                                  children: const [
+                                    Icon(Icons.videocam),
+                                    SizedBox(
+                                      width: 30.0,
+                                    ),
+                                    Text(
+                                      'Add Video',
+                                    )
+                                  ],
+                                )
+                              : _buildPlaceHolder(
+                                  videoFile!,
+                                  const Icon(
+                                    Icons.movie,
+                                    color: Colors.grey,
+                                    size: 40.0,
+                                  ), () {
+                                  setState(() {
+                                    videoFile = null;
+                                  });
+                                }),
+                          onPressed: () async {
+                            try {
+                              File _file = await _pickFile(
+                                ['mkv', 'mp4', 'avi', 'webm', 'wmv'],
+                              );
+                              setState(() {
+                                videoFile = _file;
+                              });
+                            } catch (e) {
+                              debugPrint(e.toString());
+                            }
+                          },
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        FormWrapper(
+                          padding: const EdgeInsets.all(20.0),
+                          child: voiceFile == null
+                              ? Row(
+                                  children: const [
+                                    Icon(Icons.volume_up),
+                                    SizedBox(
+                                      width: 30.0,
+                                    ),
+                                    Text(
+                                      'Add voice',
+                                    )
+                                  ],
+                                )
+                              : _buildPlaceHolder(
+                                  voiceFile!,
+                                  const Icon(
+                                    Icons.audiotrack,
+                                    color: Colors.grey,
+                                    size: 40.0,
+                                  ), () {
+                                  setState(() {
+                                    voiceFile = null;
+                                  });
+                                }),
+                          onPressed: () async {
+                            try {
+                              File _file = await _pickFile(
+                                ['mp3', 'ogg', 'wav', 'dsd', '3gpp'],
+                              );
+                              setState(() {
+                                voiceFile = _file;
+                              });
+                            } catch (e) {
+                              debugPrint(e.toString());
+                            }
+                          },
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        TextFormField(
+                          maxLines: 6,
+                          minLines: 3,
+                          onSaved: (value) {
+                            setState(() {
+                              _description = value!;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                10.0,
+                              ),
+                              borderSide: const BorderSide(
+                                color: Colors.grey,
+                              ),
                             ),
-                            SizedBox(
-                              width: 30.0,
-                            ),
-                            Text(
-                              'Add Photo',
-                            )
-                          ],
-                        )
-                      : _buildPlaceHolder(
-                          imageFile!,
-                          Image.file(
-                            imageFile!,
-                            width: 40,
-                            height: 40.0,
-                          ), () {
-                          setState(() {
-                            imageFile = null;
-                          });
-                        }),
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                FormWrapper(
-                  padding: const EdgeInsets.all(20.0),
-                  child: videoFile == null
-                      ? Row(
-                          children: const [
-                            Icon(Icons.videocam),
-                            SizedBox(
-                              width: 30.0,
-                            ),
-                            Text(
-                              'Add Video',
-                            )
-                          ],
-                        )
-                      : _buildPlaceHolder(
-                          videoFile!,
-                          const Icon(
-                            Icons.movie,
-                            color: Colors.grey,
-                            size: 40.0,
-                          ), () {
-                          setState(() {
-                            videoFile = null;
-                          });
-                        }),
-                  onPressed: () async {
-                    try {
-                      File _file = await _pickFile(
-                        ['mkv', 'mp4', 'avi', 'webm', 'wmv'],
-                      );
-                      setState(() {
-                        videoFile = _file;
-                      });
-                    } catch (e) {
-                      debugPrint(e.toString());
-                    }
-                  },
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                FormWrapper(
-                  padding: const EdgeInsets.all(20.0),
-                  child: voiceFile == null
-                      ? Row(
-                          children: const [
-                            Icon(Icons.volume_up),
-                            SizedBox(
-                              width: 30.0,
-                            ),
-                            Text(
-                              'Add voice',
-                            )
-                          ],
-                        )
-                      : _buildPlaceHolder(
-                          voiceFile!,
-                          const Icon(
-                            Icons.audiotrack,
-                            color: Colors.grey,
-                            size: 40.0,
-                          ), () {
-                          setState(() {
-                            voiceFile = null;
-                          });
-                        }),
-                  onPressed: () async {
-                    try {
-                      File _file = await _pickFile(
-                        ['mp3', 'ogg', 'wav', 'dsd', '3gpp'],
-                      );
-                      setState(() {
-                        voiceFile = _file;
-                      });
-                    } catch (e) {
-                      debugPrint(e.toString());
-                    }
-                  },
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                TextFormField(
-                  maxLines: 6,
-                  minLines: 3,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        10.0,
-                      ),
-                      borderSide: const BorderSide(
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                ),
+                          ),
+                        ),
+                      ],
+                    )),
                 const SizedBox(
                   height: 10.0,
                 ),
                 Center(
                   child: ElevatedButton(
                     onPressed: () async {
-                      // _pickFile();
-                      if (imageFile != null) {
-                        BlocProvider.of<FileuploadBloc>(context).add(UploadFile(
-                            imagePath: imageFile!.path, tag: 'images'));
-                      }
-                      if (videoFile != null) {
-                        BlocProvider.of<FileuploadBloc>(context).add(UploadFile(
-                            imagePath: videoFile!.path, tag: 'videos'));
-                      }
-                      if (voiceFile != null) {
-                        BlocProvider.of<FileuploadBloc>(context).add(UploadFile(
-                            imagePath: voiceFile!.path, tag: 'voices'));
-                      }
+                      _formKey.currentState!.save();
+                      debugPrint('Voice file is ${voiceFile!.path}');
+                      debugPrint('video file is ${videoFile!.path}');
+                      debugPrint('image file is ${imageFile!.path}');
+                      BlocProvider.of<CaseBloc>(context).add(UpdateCase(
+                          caseModel: widget.caseModel,
+                          voicePath: voiceFile!.path,
+                          videoPath: videoFile!.path,
+                          imagePath: imageFile!.path,
+                          description: _description));
                     },
                     child: const Text('Submit'),
                   ),

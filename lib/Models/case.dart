@@ -25,43 +25,67 @@ class Case {
       this.summary,
       this.description});
 
+  Case copyWith({
+    int? id,
+    String? openedDate,
+    String? closedDate,
+    int? assignedPoliceId,
+    AssignedPolice? assignedPolice,
+    int? reporterAdminId,
+    Person? reporterAdmin,
+    Evidence? evidence,
+    String? summary,
+    String? description,
+  }) =>
+      Case(
+        id: id ?? this.id,
+        openedDate: openedDate ?? this.openedDate,
+        closedDate: closedDate ?? this.closedDate,
+        assignedPoliceId: assignedPoliceId ?? this.assignedPoliceId,
+        assignedPolice: assignedPolice ?? this.assignedPolice,
+        reporterAdminId: reporterAdminId ?? this.reporterAdminId,
+        reporterAdmin: reporterAdmin ?? this.reporterAdmin,
+        evidence: evidence ?? this.evidence,
+        summary: summary ?? this.summary,
+        description: description ?? this.description,
+      );
+
   Case.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     openedDate = json['openedDate'];
     closedDate = json['closedDate'];
     assignedPoliceId = json['assignedPoliceId'];
     assignedPolice = json['assignedPolice'] != null
-        ? new AssignedPolice.fromJson(json['assignedPolice'])
+        ? AssignedPolice.fromJson(json['assignedPolice'])
         : null;
     reporterAdminId = json['reporterAdminId'];
     reporterAdmin = json['reporterAdmin'] != null
-        ? new Person.fromJson(json['reporterAdmin'])
+        ? Person.fromJson(json['reporterAdmin'])
         : null;
-    evidence = json['evidence'] != null
-        ? new Evidence.fromJson(json['evidence'])
-        : null;
+    evidence =
+        json['evidence'] != null ? Evidence.fromJson(json['evidence']) : null;
     summary = json['summary'];
     description = json['description'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['openedDate'] = this.openedDate;
-    data['closedDate'] = this.closedDate;
-    data['assignedPoliceId'] = this.assignedPoliceId;
-    if (this.assignedPolice != null) {
-      data['assignedPolice'] = this.assignedPolice!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['openedDate'] = openedDate;
+    data['closedDate'] = closedDate;
+    data['assignedPoliceId'] = assignedPoliceId;
+    if (assignedPolice != null) {
+      data['assignedPolice'] = assignedPolice!.toJson();
     }
-    data['reporterAdminId'] = this.reporterAdminId;
-    if (this.reporterAdmin != null) {
-      data['reporterAdmin'] = this.reporterAdmin!.toJson();
+    data['reporterAdminId'] = reporterAdminId;
+    if (reporterAdmin != null) {
+      data['reporterAdmin'] = reporterAdmin!.toJson();
     }
-    if (this.evidence != null) {
-      data['evidence'] = this.evidence!.toJson();
+    if (evidence != null) {
+      data['evidence'] = evidence!.toJson();
     }
-    data['summary'] = this.summary;
-    data['description'] = this.description;
+    data['summary'] = summary;
+    data['description'] = description;
     return data;
   }
 }
@@ -88,30 +112,25 @@ class AssignedPolice {
     level = json['level'];
     stationId = json['stationId'];
     station =
-        json['station'] != null ? new Station.fromJson(json['station']) : null;
-    person =
-        json['person'] != null ? new Person.fromJson(json['person']) : null;
+        json['station'] != null ? Station.fromJson(json['station']) : null;
+    person = json['person'] != null ? Person.fromJson(json['person']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['experiance'] = this.experiance;
-    data['level'] = this.level;
-    data['stationId'] = this.stationId;
-    if (this.station != null) {
-      data['station'] = this.station!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['experiance'] = experiance;
+    data['level'] = level;
+    data['stationId'] = stationId;
+    if (station != null) {
+      data['station'] = station!.toJson();
     }
-    if (this.person != null) {
-      data['person'] = this.person!.toJson();
+    if (person != null) {
+      data['person'] = person!.toJson();
     }
     return data;
   }
 }
-
-
-
-
 
 class Evidence {
   int? id;
@@ -119,21 +138,31 @@ class Evidence {
   Attachment? attachment;
 
   Evidence({this.id, this.description, this.attachment});
+  Evidence copyWith({
+    int? id,
+    String? description,
+    Attachment? attachment,
+  }) =>
+      Evidence(
+        id: id ?? this.id,
+        description: description ?? this.description,
+        attachment: attachment ?? this.attachment,
+      );
 
   Evidence.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     description = json['description'];
     attachment = json['attachment'] != null
-        ? new Attachment.fromJson(json['attachment'])
+        ? Attachment.fromJson(json['attachment'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['description'] = this.description;
-    if (this.attachment != null) {
-      data['attachment'] = this.attachment!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['description'] = description;
+    if (attachment != null) {
+      data['attachment'] = attachment!.toJson();
     }
     return data;
   }
@@ -145,41 +174,59 @@ class Attachment {
   List<Media>? voices;
   List<Media>? videos;
 
-  Attachment({this.id, this.images, this.voices, this.videos});
+  Attachment({
+    this.id,
+    this.images,
+    this.voices,
+    this.videos,
+  });
+
+  Attachment copyWith({
+        int? id,
+        List<Media>? images,
+        List<Media>?voices,
+        List<Media>? videos,
+    }) => 
+        Attachment(
+            id: id ?? this.id,
+            images: images ?? this.images,
+            voices: voices ?? this.voices,
+            videos: videos ?? this.videos,
+        );
 
   Attachment.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     if (json['images'] != null) {
       images = <Media>[];
       json['images'].forEach((v) {
-        images!.add(new Media.fromJson(v));
+        images!.add(Media.fromJson(v));
       });
     }
     if (json['voices'] != null) {
       voices = <Media>[];
       json['voices'].forEach((v) {
-        voices!.add(new Media.fromJson(v));
+        voices!.add(Media.fromJson(v));
       });
     }
     if (json['videos'] != null) {
       videos = <Media>[];
       json['videos'].forEach((v) {
-        videos!.add(new Media.fromJson(v));
+        videos!.add(Media.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    if (this.images != null) {
-      data['images'] = this.images!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    if (images != null) {
+      data['images'] = images!.map((v) => v.toJson()).toList();
     }
-    if (this.voices != null) {
-      data['voices'] = this.voices!.map((v) => v.toJson()).toList();
+    if (voices != null) {
+      data['voices'] = voices!.map((v) => v.toJson()).toList();
     }
-    if (this.videos != null) {
-      data['videos'] = this.videos!.map((v) => v.toJson()).toList();
+    if (videos != null) {
+      data['videos'] = videos!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -197,9 +244,9 @@ class Media {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['url'] = this.url;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    // data['id'] = id;
+    data['url'] = url;
     return data;
   }
 }

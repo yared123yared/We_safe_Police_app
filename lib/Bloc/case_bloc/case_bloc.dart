@@ -13,6 +13,7 @@ class CaseBloc extends Bloc<CaseEvent, CaseState> {
   }) : super(CaseInitial()) {
     on<FetchCaseByPoliceId>(_mapFetchPoliceCases);
     on<DeleteCase>(_mapDeleteCase);
+    on<UpdateCase>(_mapUpdateCase);
   }
 
   // get case by id
@@ -25,9 +26,30 @@ class CaseBloc extends Bloc<CaseEvent, CaseState> {
       emit(CaseLoaded(_response));
       
     } catch (e) {
+      print('The Fetch error is ${e.toString()}');
       emit(CaseError(e.toString()));
     }
     
+  }
+
+  // update
+  void _mapUpdateCase(UpdateCase event, Emitter<CaseState> emit) async{
+    emit (CaseLoading());
+
+    try {
+      final _response = await repository.updateCase(
+        event.caseModel,
+        discription: event.description,
+        imagePath: event.imagePath,
+        videoPath: event.videoPath,
+        voicePath: event.voicePath
+        );
+      emit(CaseLoaded([_response]));
+      
+    } catch (e) {
+      print('The error is ${e.toString()}');
+      throw Exception(e.toString());
+    }
   }
 
   //delete

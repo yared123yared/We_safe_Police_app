@@ -13,6 +13,21 @@ class FetchCaseByPoliceId extends CaseEvent{
   
 }
 
+class UpdateCase extends CaseEvent{
+  final Case caseModel;
+  final String? imagePath;
+  final String? videoPath;
+  final String? voicePath;
+  final String? description;
+  const UpdateCase({
+    required  this.caseModel,
+    this.imagePath,
+    this.videoPath,
+    this.voicePath,
+    this.description,
+  });
+}
+
 class DeleteCase extends CaseEvent{
   final String caseId;
 

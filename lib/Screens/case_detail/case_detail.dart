@@ -29,6 +29,7 @@ class _CaseDetailState extends State<CaseDetail> {
               onPressed: () {
                 Navigator.of(context).pushNamed(
                   CaseEvidenceAdd.routeName,
+                  arguments: widget.policeCase
                 );
               },
               icon: const Icon(

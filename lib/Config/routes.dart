@@ -42,8 +42,11 @@ class AppRoute {
         builder: (context) => NewsDetail(_news),
       );
     } else if (settings.name == CaseEvidenceAdd.routeName) {
+      final _case = settings.arguments as Case;
       return MaterialPageRoute(
-        builder: ((context) => const CaseEvidenceAdd()),
+        builder: ((context) => CaseEvidenceAdd(
+              caseModel: _case,
+            )),
       );
     }
     return MaterialPageRoute(builder: (context) => const PoliceLoginpage());

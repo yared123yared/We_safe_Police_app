@@ -1,19 +1,21 @@
 class Address {
+  int? id;
   String? city;
   String? subcity;
   String? kebele;
-  int? latitude;
-  int? longtiude;
+  double? latitude;
+  double? longtiude;
 
-  Address({
-    this.city,
-    this.subcity,
-    this.kebele,
-    this.latitude,
-    this.longtiude,
-  });
+  Address(
+      {this.id,
+      this.city,
+      this.subcity,
+      this.kebele,
+      this.latitude,
+      this.longtiude});
 
   Address.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     city = json['city'];
     subcity = json['subcity'];
     kebele = json['kebele'];
@@ -23,6 +25,7 @@ class Address {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
     data['city'] = city;
     data['subcity'] = subcity;
     data['kebele'] = kebele;

@@ -12,6 +12,7 @@ class FileuploadBloc extends Bloc<FileuploadEvent, FileuploadState> {
   }
 
   void _mapUploadImage(UploadFile event, Emitter<FileuploadState> emit) async{
+    emit(FileuploadLoading());
     try {
       await _firebaseStorageClass.addFile(event.imagePath,event.tag);
       emit(const FileuploadLoaded('success'));
