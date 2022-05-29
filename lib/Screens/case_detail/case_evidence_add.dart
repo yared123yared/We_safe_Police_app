@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wesafepoliceapp/Bloc/fileupload_bloc/fileupload_bloc.dart';
 
 class CaseEvidenceAdd extends StatefulWidget {
   static const routeName = 'wesafepoliceapp/caseevidenceadd';
@@ -10,136 +14,257 @@ class CaseEvidenceAdd extends StatefulWidget {
 }
 
 class CaseEvidenceAddState extends State<CaseEvidenceAdd> {
+  File? imageFile;
+  File? videoFile;
+  File? voiceFile;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Evidence'),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildTopWidget(),
-              const SizedBox(
-                height: 20.0,
-              ),
-              const Text(
-                'Evidence',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              FormWrapper(
-                onPressed: () async {
-                  _pickFile(
-                    ['png', 'jpeg', 'jpg'],
-                  );
-                },
-                padding: const EdgeInsets.symmetric(
-                  vertical: 20.0,
-                  horizontal: 20.0,
+      body: BlocListener<FileuploadBloc, FileuploadState>(
+        listener: (context, state) {
+          if(state is FileuploadLoading){
+            showDialog(
+              context: context, builder: (context) => Container(
+                decoration:  BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0)
                 ),
                 child: Row(
                   children: const [
-                    Icon(
-                      Icons.add_a_photo,
-                    ),
-                    SizedBox(
-                      width: 30.0,
-                    ),
-                    Text(
-                      'Add Photo',
-                    )
+                    CircularProgressIndicator(),
+                    SizedBox(width: 40.0,),
+                    Text('Loading')
                   ],
                 ),
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              FormWrapper(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  children: const [
-                    Icon(Icons.videocam),
-                    SizedBox(
-                      width: 30.0,
-                    ),
-                    Text(
-                      'Add Video',
-                    )
-                  ],
+              )
+              
+            );
+          }
+        },
+        child: SingleChildScrollView(
+          child: Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildTopWidget(),
+                const SizedBox(
+                  height: 20.0,
                 ),
-                onPressed: () async {
-                  _pickFile(
-                    ['mkv', 'mp4', 'avi', 'webm', 'wmv'],
-                  );
-                },
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              FormWrapper(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  children: const [
-                    Icon(Icons.volume_up),
-                    SizedBox(
-                      width: 30.0,
-                    ),
-                    Text(
-                      'Add voice',
-                    )
-                  ],
+                const Text(
+                  'Evidence',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                onPressed: () {
-                  _pickFile(
-                    ['mp3', 'ogg', 'wav', 'dsd'],
-                  );
-                },
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              TextFormField(
-                maxLines: 6,
-                minLines: 3,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(
-                      10.0,
-                    ),
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
+                const SizedBox(
+                  height: 10.0,
+                ),
+                FormWrapper(
+                  onPressed: () async {
+                    try {
+                      final _file = await _pickFile(
+                        ['png', 'jpeg', 'jpg'],
+                      );
+                      setState(() {
+                        imageFile = _file;
+                      });
+                    } catch (e) {
+                      debugPrint("The error is ==================>");
+                      debugPrint(e.toString());
+                    }
+                  },
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20.0,
+                    horizontal: 20.0,
+                  ),
+                  child: imageFile == null
+                      ? Row(
+                          children: const [
+                            Icon(
+                              Icons.add_a_photo,
+                            ),
+                            SizedBox(
+                              width: 30.0,
+                            ),
+                            Text(
+                              'Add Photo',
+                            )
+                          ],
+                        )
+                      : _buildPlaceHolder(
+                          imageFile!,
+                          Image.file(
+                            imageFile!,
+                            width: 40,
+                            height: 40.0,
+                          ), () {
+                          setState(() {
+                            imageFile = null;
+                          });
+                        }),
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                FormWrapper(
+                  padding: const EdgeInsets.all(20.0),
+                  child: videoFile == null
+                      ? Row(
+                          children: const [
+                            Icon(Icons.videocam),
+                            SizedBox(
+                              width: 30.0,
+                            ),
+                            Text(
+                              'Add Video',
+                            )
+                          ],
+                        )
+                      : _buildPlaceHolder(
+                          videoFile!,
+                          const Icon(
+                            Icons.movie,
+                            color: Colors.grey,
+                            size: 40.0,
+                          ), () {
+                          setState(() {
+                            videoFile = null;
+                          });
+                        }),
+                  onPressed: () async {
+                    try {
+                      File _file = await _pickFile(
+                        ['mkv', 'mp4', 'avi', 'webm', 'wmv'],
+                      );
+                      setState(() {
+                        videoFile = _file;
+                      });
+                    } catch (e) {
+                      debugPrint(e.toString());
+                    }
+                  },
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                FormWrapper(
+                  padding: const EdgeInsets.all(20.0),
+                  child: voiceFile == null
+                      ? Row(
+                          children: const [
+                            Icon(Icons.volume_up),
+                            SizedBox(
+                              width: 30.0,
+                            ),
+                            Text(
+                              'Add voice',
+                            )
+                          ],
+                        )
+                      : _buildPlaceHolder(
+                          voiceFile!,
+                          const Icon(
+                            Icons.audiotrack,
+                            color: Colors.grey,
+                            size: 40.0,
+                          ), () {
+                          setState(() {
+                            voiceFile = null;
+                          });
+                        }),
+                  onPressed: () async {
+                    try {
+                      File _file = await _pickFile(
+                        ['mp3', 'ogg', 'wav', 'dsd', '3gpp'],
+                      );
+                      setState(() {
+                        voiceFile = _file;
+                      });
+                    } catch (e) {
+                      debugPrint(e.toString());
+                    }
+                  },
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TextFormField(
+                  maxLines: 6,
+                  minLines: 3,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                        10.0,
+                      ),
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    // _pickFile();
-                  },
-                  child: const Text('Submit'),
+                const SizedBox(
+                  height: 10.0,
                 ),
-              )
-            ],
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      // _pickFile();
+                      if (imageFile != null) {
+                        BlocProvider.of<FileuploadBloc>(context).add(UploadFile(
+                            imagePath: imageFile!.path, tag: 'images'));
+                      }
+                      if (videoFile != null) {
+                        BlocProvider.of<FileuploadBloc>(context).add(UploadFile(
+                            imagePath: videoFile!.path, tag: 'videos'));
+                      }
+                      if (voiceFile != null) {
+                        BlocProvider.of<FileuploadBloc>(context).add(UploadFile(
+                            imagePath: voiceFile!.path, tag: 'voices'));
+                      }
+                    },
+                    child: const Text('Submit'),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  _pickFile(List<String> extensions) async {
+  Widget _buildPlaceHolder(File _file, Widget leading, Function() onpressed) {
+    return Row(
+      children: [
+        Expanded(
+          child: Row(
+            children: [
+              leading,
+              const SizedBox(
+                width: 30.0,
+              ),
+              Expanded(
+                child: Text(
+                  _file.path.substring(_file.path.lastIndexOf('/') + 1),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ),
+        IconButton(onPressed: onpressed, icon: const Icon(Icons.close))
+      ],
+    );
+  }
+
+  Future<File> _pickFile(List<String> extensions) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: extensions,
@@ -147,14 +272,11 @@ class CaseEvidenceAddState extends State<CaseEvidenceAdd> {
 
     if (result != null) {
       PlatformFile file = result.files.first;
-
-      print(file.name);
-      print(file.bytes);
-      print(file.size);
-      print(file.extension);
-      print(file.path);
+      File _file = File(file.path!);
+      return _file;
     } else {
       // User canceled the picker
+      throw Exception('Operation canceled');
     }
   }
 

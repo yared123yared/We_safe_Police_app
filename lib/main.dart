@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wesafepoliceapp/Bloc/fileupload_bloc/fileupload_bloc.dart';
 import 'package:wesafepoliceapp/Bloc/login_bloc/login_bloc.dart';
 import 'package:wesafepoliceapp/Bloc/news_bloc/news_bloc.dart';
 import 'package:wesafepoliceapp/Bloc/send_otp_bloc/send_otp_bloc_bloc.dart';
@@ -22,7 +23,8 @@ Future main() async {
       authDataProvider: AuthDataProvider(httpClient: http.Client()));
   PhoneAuthRepository phoneAuthRepository = PhoneAuthRepository();
 
-  NewsRespository _newsRespository = NewsRespository(dataProvider: NewsDataProvider(httpClient: http.Client()));
+  NewsRespository _newsRespository = NewsRespository(
+      dataProvider: NewsDataProvider(httpClient: http.Client()));
   runApp(PoliceApp(
     authRepository: _authrepository,
     phoneAuthRepository: phoneAuthRepository,
@@ -53,8 +55,12 @@ class PoliceApp extends StatelessWidget {
               SendOtpBlocBloc(phoneAuthRepository: phoneAuthRepository),
         ),
         BlocProvider<NewsBloc>(
-          create: (context) => NewsBloc(respository: newsRespository)..add(FetchNews()),
+          create: (context) =>
+              NewsBloc(respository: newsRespository)..add(FetchNews()),
         ),
+        BlocProvider<FileuploadBloc>(
+          create: (context) => FileuploadBloc(),
+        )
       ],
       child: MaterialApp(
         initialRoute: PoliceSplashScreen.routeName,
