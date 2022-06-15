@@ -17,3 +17,9 @@ class LoginSubmitted extends LoginEvent {
     required this.phone,
   });
 }
+
+
+class ResetPassword extends LoginEvent{
+  final String newPassword;
+  const ResetPassword(this.newPassword);
+}

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wesafepoliceapp/Bloc/login_bloc/login_bloc.dart';
 import 'package:wesafepoliceapp/Bloc/send_otp_bloc/send_otp_bloc_bloc.dart';
-import 'package:wesafepoliceapp/Screens/home/homepage.dart';
 import 'package:wesafepoliceapp/Screens/login/components/login_components.dart';
 
 class PoliceLoginpage extends StatefulWidget {
@@ -29,7 +28,6 @@ class _PoliceLoginpageState extends State<PoliceLoginpage> {
   }
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         body: BlocConsumer<LoginBloc, LoginState>(

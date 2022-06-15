@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:wesafepoliceapp/Config/user_preference.dart';
 import 'package:wesafepoliceapp/Models/models.dart';
 import 'package:wesafepoliceapp/Repository/firebase_storage.dart';
 
@@ -17,15 +16,15 @@ class CaseDataProvider {
   // get all cases;
 
   Future<dynamic> getAssignedPoliceCases() async {
-    UserPreference _userPreference = UserPreference();
-    final _preferenceData = _userPreference.getLoginInformation();
+    // UserPreference _userPreference = UserPreference();
+    // final _preferenceData = _userPreference.getLoginInformation();
     late dynamic _jsonResponse;
     try {
       final _response = await httpClient.get(
         Uri.parse('https://we-safe-development.herokuapp.com/api/case/'),
       );
       _jsonResponse = returnResponse(_response);
-    } on SocketException catch (e) {
+    } on SocketException {
       throw FetchDataException('No Internet Connection');
     }
     return _jsonResponse;
@@ -43,10 +42,7 @@ class CaseDataProvider {
     String _videoPath = '';
     String _voicePath = '';
     String _description = caseModel.evidence!.description!;
-    print('description is $_description');
-    print('image path is $imagePath');
-    print('desvoice path cription is $voicePath');
-    print('video path is $videoPath');
+
     try {
       if (imagePath != '') {
         _imagePath = await _firebaseStorageClass.addFile(imagePath!, 'images');
@@ -86,14 +82,13 @@ class CaseDataProvider {
       Evidence _evidence = caseModel.evidence!
           .copyWith(attachment: _copiedAttachement, description: _description);
       Case _case = caseModel.copyWith(evidence: _evidence);
-      print('The hash string is${_case.toJson()}');
 
       final _response = await httpClient.put(
           Uri.parse('https://we-safe-development.herokuapp.com/api/case/${caseModel.id}'),
           headers: <String, String>{'Content-Type': 'application/json'},
           body: jsonEncode(_case.toJson()));
       _jsonRespnse = returnResponse(_response);
-    } on SocketException catch (e) {
+    } on SocketException {
       throw FetchDataException('No Internet Connection');
     }
     return _jsonRespnse;
@@ -105,7 +100,7 @@ class CaseDataProvider {
       final _response = await httpClient.delete(Uri.parse(
           'https://we-safe-development.herokuapp.com/api/case/$caseId'));
       _jsonResponse = returnResponse(_response);
-    } on SocketException catch (e) {
+    } on SocketException {
       throw FetchDataException('No Internet Connection');
     }
     return _jsonResponse;

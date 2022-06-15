@@ -17,4 +17,10 @@ class AuthRepository{
     await _userPreference.storeLoginInformation(_loginInfo);
     return _loginInfo;
   }
+
+  // reset password
+  Future<Police> resetPolicePassword(String newPassword) async{
+    final _jsonResponse = await authDataProvider.resetPolicePassword(newPassword);
+    return Police.fromJson(_jsonResponse);
+  }
 } 

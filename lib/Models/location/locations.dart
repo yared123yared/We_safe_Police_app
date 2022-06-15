@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter/services.dart' show rootBundle;
-
+import 'package:flutter/material.dart';
 part 'locations.g.dart';
 
 @JsonSerializable()
@@ -91,7 +91,7 @@ Future<Locations> getGoogleOffices() async {
       return Locations.fromJson(json.decode(response.body));
     }
   } catch (e) {
-    print(e);
+    debugPrint(e.toString());
   }
 
   // Fallback for when the above HTTP request fails.

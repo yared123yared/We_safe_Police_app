@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:wesafepoliceapp/Screens/live_detail/map_detail.dart';
 import 'package:wesafepoliceapp/Screens/screens.dart';
 
 class HomeReport extends StatefulWidget {
@@ -36,7 +38,7 @@ class _HomeReportState extends State<HomeReport> {
         ),
         GestureDetector(
           onTap: (){
-            Navigator.of(context).pushNamed(ALertDetail.routeName);
+            Navigator.of(context).pushNamed(MapDetail.routeName, arguments: const LatLng(8.980603, 38.757759));
           },
           child: _buildNamesNames(),
           ),
@@ -45,7 +47,6 @@ class _HomeReportState extends State<HomeReport> {
       ],
     );
   }
-
   Widget _buildNamesNames() {
     return Container(
       color: Colors.white,

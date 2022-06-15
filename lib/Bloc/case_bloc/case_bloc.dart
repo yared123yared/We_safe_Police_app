@@ -26,7 +26,6 @@ class CaseBloc extends Bloc<CaseEvent, CaseState> {
       emit(CaseLoaded(_response));
       
     } catch (e) {
-      print('The Fetch error is ${e.toString()}');
       emit(CaseError(e.toString()));
     }
     
@@ -47,7 +46,6 @@ class CaseBloc extends Bloc<CaseEvent, CaseState> {
       emit(CaseLoaded([_response]));
       
     } catch (e) {
-      print('The error is ${e.toString()}');
       throw Exception(e.toString());
     }
   }

@@ -51,7 +51,7 @@ class _HomeCaseState extends State<HomeCase> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
-                          "Recent History",
+                          "Recent Cases",
                           style: TextStyle(color: Colors.grey),
                         ),
                         Row(

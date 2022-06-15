@@ -18,7 +18,7 @@ class NewsDataProvider{
 
       _jsonResponse = returnResponse(_response);
       
-    } on SocketException catch (e) {
+    } on SocketException {
       throw FetchDataException('No Internet Connection');
     }
     return _jsonResponse;

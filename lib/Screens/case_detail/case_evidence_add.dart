@@ -4,7 +4,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wesafepoliceapp/Bloc/case_bloc/case_bloc.dart';
-import 'package:wesafepoliceapp/Bloc/fileupload_bloc/fileupload_bloc.dart';
 import 'package:wesafepoliceapp/Models/case.dart';
 
 class CaseEvidenceAdd extends StatefulWidget {
@@ -23,6 +22,15 @@ class CaseEvidenceAddState extends State<CaseEvidenceAdd> {
   String _description = '';
 
   final _formKey = GlobalKey<FormState>();
+   _showSnackBar(String message, Color color){
+    SnackBar _snackBar = SnackBar(
+      backgroundColor: Colors.grey,
+      content: Text(message, style:  TextStyle(
+        color: color
+      ),)
+      );
+    ScaffoldMessenger.of(context).showSnackBar(_snackBar,);
+  }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -54,8 +62,14 @@ class CaseEvidenceAddState extends State<CaseEvidenceAdd> {
                 ),
               )),
             );
-          } else {
+          } else if(state is CaseLoaded) {
             Navigator.of(context).pop();
+            _showSnackBar('Successfull added!', Colors.black);
+            Future.delayed(const Duration(seconds: 1)).then((value) => Navigator.of(context).pop());
+          }
+          else if(state is CaseError){
+            Navigator.of(context).pop();
+            _showSnackBar('Error Occured!', Colors.red);
           }
         },
         child: SingleChildScrollView(
@@ -88,6 +102,7 @@ class CaseEvidenceAddState extends State<CaseEvidenceAdd> {
                             try {
                               final _file = await _pickFile(
                                 ['png', 'jpeg', 'jpg'],
+                                FileType.image
                               );
                               setState(() {
                                 imageFile = _file;
@@ -159,6 +174,7 @@ class CaseEvidenceAddState extends State<CaseEvidenceAdd> {
                             try {
                               File _file = await _pickFile(
                                 ['mkv', 'mp4', 'avi', 'webm', 'wmv'],
+                                FileType.video
                               );
                               setState(() {
                                 videoFile = _file;
@@ -200,6 +216,7 @@ class CaseEvidenceAddState extends State<CaseEvidenceAdd> {
                             try {
                               File _file = await _pickFile(
                                 ['mp3', 'ogg', 'wav', 'dsd', '3gpp'],
+                                FileType.audio
                               );
                               setState(() {
                                 voiceFile = _file;
@@ -286,10 +303,10 @@ class CaseEvidenceAddState extends State<CaseEvidenceAdd> {
     );
   }
 
-  Future<File> _pickFile(List<String> extensions) async {
+  Future<File> _pickFile(List<String> extensions, FileType fileType) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: extensions,
+      type: fileType,
+      // allowedExtensions: extensions,
     );
 
     if (result != null) {

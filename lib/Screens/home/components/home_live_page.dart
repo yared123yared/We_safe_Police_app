@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wesafepoliceapp/Screens/screens.dart';
 import 'package:wesafepoliceapp/Widgets/widgets.dart';
 
@@ -45,7 +46,7 @@ class _HomeLiveState extends State<HomeLive> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap:(){
-                      Navigator.of(context).pushNamed(LiveDetail.routeName);
+                      Navigator.of(context).pushNamed(LiveDetail.routeName, arguments: const LatLng(8.980603, 38.757759));
                     },
                     child: LiveImage(
                       image: _images[index],

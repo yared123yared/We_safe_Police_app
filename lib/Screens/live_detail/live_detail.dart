@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wesafepoliceapp/Screens/live_detail/map_detail.dart';
 import 'package:wesafepoliceapp/Widgets/map_location.dart';
 import 'package:wesafepoliceapp/Widgets/widgets.dart';
@@ -16,10 +17,11 @@ class _LiveDetailState extends State<LiveDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          // backgroundColor: Colors.white,
-          title: const Text(
-        'Live Detail',
-      )),
+        // backgroundColor: Colors.white,
+        title: const Text(
+          'Live Detail',
+        ),
+      ),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.symmetric(
@@ -66,14 +68,15 @@ class _LiveDetailState extends State<LiveDetail> {
                 children: [
                   const MapLocaton(
                     height: 250.0,
+                    latLng: LatLng(8.980603, 38.757759),
                   ),
-                   GestureDetector(
-                  onTap: () {
-                    debugPrint('>>>>>>>>>>>>>>>>>>>Pushing to new route');
-                    Navigator.of(context).pushNamed(MapDetail.routeName);
-                  },
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pushNamed(MapDetail.routeName,arguments: const LatLng(8.980603, 38.757759));
+                    },
                     child: Container(
-                      padding:const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30.0, vertical: 20.0),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12.0),
                           color: Colors.black.withOpacity(0.3)),

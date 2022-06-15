@@ -2,9 +2,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wesafepoliceapp/Bloc/case_bloc/case_bloc.dart';
+import 'package:wesafepoliceapp/Bloc/criminal_bloc/criminal_bloc.dart';
 import 'package:wesafepoliceapp/Bloc/fileupload_bloc/fileupload_bloc.dart';
+import 'package:wesafepoliceapp/Bloc/investigation_bloc/investigation_bloc.dart';
 import 'package:wesafepoliceapp/Bloc/login_bloc/login_bloc.dart';
 import 'package:wesafepoliceapp/Bloc/news_bloc/news_bloc.dart';
+import 'package:wesafepoliceapp/Bloc/police_bloc/police_bloc.dart';
 import 'package:wesafepoliceapp/Bloc/send_otp_bloc/send_otp_bloc_bloc.dart';
 import 'package:wesafepoliceapp/Config/routes.dart';
 import 'package:wesafepoliceapp/Dataprovider/dataprovider.dart';
@@ -28,10 +31,10 @@ Future main() async {
   NewsRespository _newsRespository = NewsRespository(
       dataProvider: NewsDataProvider(httpClient: http.Client()));
   final _repository = CaseRepository(
-      dataProvider: CaseDataProvider(
-        httpClient: http.Client(),
-      ),
-    );
+    dataProvider: CaseDataProvider(
+      httpClient: http.Client(),
+    ),
+  );
   runApp(PoliceApp(
     authRepository: _authrepository,
     phoneAuthRepository: phoneAuthRepository,
@@ -73,8 +76,21 @@ class PoliceApp extends StatelessWidget {
         ),
         BlocProvider<CaseBloc>(
           lazy: false,
-          create: (context) => CaseBloc(repository: caseRepository,),
-        )
+          create: (context) => CaseBloc(
+            repository: caseRepository,
+          ),
+        ),
+        BlocProvider<InvestigationBloc>(
+            create: ((context) => InvestigationBloc())),
+        BlocProvider(
+          create: ((context) => CriminalBloc()
+            ..add(
+              FetchCriminals(),
+            )),
+        ),
+        BlocProvider<PoliceBloc>(
+          create: ((context) => PoliceBloc()),
+        ),
       ],
       child: MaterialApp(
         initialRoute: PoliceSplashScreen.routeName,

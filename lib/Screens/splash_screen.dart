@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wesafepoliceapp/Config/user_preference.dart';
-import 'package:wesafepoliceapp/Models/login_info.dart';
 import 'package:wesafepoliceapp/Screens/home/homepage.dart';
 import 'package:wesafepoliceapp/Screens/login/login_screen.dart';
 

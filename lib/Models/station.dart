@@ -1,36 +1,52 @@
 class Station {
-  int? id;
-  String? stationName;
-  String? city;
-  String? subcity;
-  String? latitude;
-  String? longtiude;
+    Station({
+        this.id,
+        this.stationName,
+        this.city,
+        this.subcity,
+        this.latitude,
+        this.longtiude,
+    });
 
-  Station(
-      {this.id,
-      this.stationName,
-      this.city,
-      this.subcity,
-      this.latitude,
-      this.longtiude});
+    int? id;
+    String? stationName;
+    String? city;
+    String? subcity;
+    String? latitude;
+    String? longtiude;
 
-  Station.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    stationName = json['stationName'];
-    city = json['city'];
-    subcity = json['subcity'];
-    latitude = json['latitude'];
-    longtiude = json['longtiude'];
-  }
+    Station copyWith({
+        int? id,
+        String? stationName,
+        String? city,
+        String? subcity,
+        String? latitude,
+        String? longtiude,
+    }) => 
+        Station(
+            id: id ?? this.id,
+            stationName: stationName ?? this.stationName,
+            city: city ?? this.city,
+            subcity: subcity ?? this.subcity,
+            latitude: latitude ?? this.latitude,
+            longtiude: longtiude ?? this.longtiude,
+        );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['stationName'] = this.stationName;
-    data['city'] = this.city;
-    data['subcity'] = this.subcity;
-    data['latitude'] = this.latitude;
-    data['longtiude'] = this.longtiude;
-    return data;
-  }
+    factory Station.fromJson(Map<String, dynamic> json) => Station(
+        id: json["id"],
+        stationName: json["stationName"],
+        city: json["city"],
+        subcity: json["subcity"],
+        latitude: json["latitude"],
+        longtiude: json["longtiude"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "stationName": stationName,
+        "city": city,
+        "subcity": subcity,
+        "latitude": latitude,
+        "longtiude": longtiude,
+    };
 }

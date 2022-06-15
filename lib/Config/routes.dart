@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:path/path.dart';
 import 'package:wesafepoliceapp/Models/case.dart';
 import 'package:wesafepoliceapp/Models/new_model.dart';
 import 'package:wesafepoliceapp/Screens/case_detail/case_evidence_add.dart';
@@ -9,6 +11,9 @@ import 'package:wesafepoliceapp/Screens/otp/otp_screen.dart';
 import 'package:wesafepoliceapp/Screens/resetpassword/reset_passowrd.dart';
 import 'package:wesafepoliceapp/Screens/screens.dart';
 import 'package:wesafepoliceapp/Screens/splash_screen.dart';
+import 'package:wesafepoliceapp/Widgets/image_viewer_widget.dart';
+import 'package:wesafepoliceapp/Widgets/search_image.dart';
+import 'package:wesafepoliceapp/Widgets/video_player_widget.dart';
 
 class AppRoute {
   static Route generateRoute(RouteSettings settings) {
@@ -28,7 +33,9 @@ class AppRoute {
     } else if (settings.name == LiveDetail.routeName) {
       return MaterialPageRoute(builder: (context) => const LiveDetail());
     } else if (settings.name == MapDetail.routeName) {
-      return MaterialPageRoute(builder: (context) => const MapDetail());
+      final LatLng latLng = settings.arguments as LatLng;
+      return MaterialPageRoute(builder: (context) =>  MapDetail(latLng: latLng,));
+
     } else if (settings.name == CaseDetail.routeName) {
       final _policeCase = settings.arguments as Case;
       return MaterialPageRoute(
@@ -48,6 +55,16 @@ class AppRoute {
               caseModel: _case,
             )),
       );
+    } else if (settings.name == SearchImage.routeName) {
+      return MaterialPageRoute(
+        builder: (context) => const SearchImage(),
+      );
+    }else if(settings.name == CustomVideoPlayer.routeName){
+      final _videoUrl = settings.arguments as String;
+      return MaterialPageRoute(builder: (context) => CustomVideoPlayer(url: _videoUrl));
+    }else if(settings.name == ImageViewerWidget.routeName){
+      final _imageUrl = settings.arguments as String;
+      return MaterialPageRoute(builder: (context) => ImageViewerWidget(imageUrl: _imageUrl));
     }
     return MaterialPageRoute(builder: (context) => const PoliceLoginpage());
   }
