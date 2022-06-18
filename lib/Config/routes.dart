@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:path/path.dart';
 import 'package:wesafepoliceapp/Models/case.dart';
+import 'package:wesafepoliceapp/Models/login_info.dart';
 import 'package:wesafepoliceapp/Models/new_model.dart';
 import 'package:wesafepoliceapp/Screens/case_detail/case_evidence_add.dart';
+import 'package:wesafepoliceapp/Screens/home/components/profile_page.dart';
 import 'package:wesafepoliceapp/Screens/live_detail/map_detail.dart';
 import 'package:wesafepoliceapp/Screens/login/login_screen.dart';
 import 'package:wesafepoliceapp/Screens/news_widget.dart/news_detail.dart';
@@ -65,6 +67,12 @@ class AppRoute {
     }else if(settings.name == ImageViewerWidget.routeName){
       final _imageUrl = settings.arguments as String;
       return MaterialPageRoute(builder: (context) => ImageViewerWidget(imageUrl: _imageUrl));
+    } else if(settings.name == ProfilePage.routeName){
+      final _logiInfo = settings.arguments as LoginInfo;
+      return MaterialPageRoute(builder: ((context) =>  ProfilePage(
+        loginInfo: _logiInfo,
+      )));
+
     }
     return MaterialPageRoute(builder: (context) => const PoliceLoginpage());
   }

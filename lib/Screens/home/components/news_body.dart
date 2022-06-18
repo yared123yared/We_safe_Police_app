@@ -86,13 +86,13 @@ class _HomeNewsState extends State<HomeNews> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [0, 1, 2]
+                  children: state.newsDatas
                       .map((item) => Container(
                             margin: const EdgeInsets.symmetric(
                               horizontal: 2.0,
                             ),
                             height: 3,
-                            width: _currentIndex == item ? 20 : 7,
+                            width: _currentIndex == item.id ? 20 : 7,
                             decoration: BoxDecoration(
                               color: Colors.grey,
                               borderRadius: BorderRadius.circular(10),

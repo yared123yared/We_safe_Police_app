@@ -92,9 +92,11 @@ class PoliceApp extends StatelessWidget {
           create: ((context) => PoliceBloc()),
         ),
       ],
+      
       child: MaterialApp(
         initialRoute: PoliceSplashScreen.routeName,
         onGenerateRoute: AppRoute.generateRoute,
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
             primarySwatch: createMaterialColor(Colors.blue),
             primaryColor: kPrimaryColor),

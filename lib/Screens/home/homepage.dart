@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wesafepoliceapp/Config/user_preference.dart';
 import 'package:wesafepoliceapp/Screens/home/components/home_case.dart';
+import 'package:wesafepoliceapp/Screens/home/components/home_drawer.dart';
 import 'package:wesafepoliceapp/Screens/home/components/home_live_page.dart';
 import 'package:wesafepoliceapp/Screens/home/components/home_alert_page.dart';
 import 'package:wesafepoliceapp/Screens/home/components/investigate.dart';
@@ -56,19 +57,7 @@ class _PoliceHomepageState extends State<PoliceHomepage> {
     switch (index) {
       case 0:
         return Row(children: [
-          GestureDetector(
-            onTap: () {
-              debugPrint('Reset password page');
-                Navigator.of(context).pushNamed(
-                  ResetPassword.routeName
-                );
-            },
-            child: const Icon(
-              Icons.notifications,
-              color: kIconColor,
-              size: 30.0,
-            ),
-          ),
+          
           GestureDetector(
             onTap: () {},
             child: const Icon(
@@ -129,25 +118,22 @@ class _PoliceHomepageState extends State<PoliceHomepage> {
           title: _buildAppBarTitle(_currentIndex),
           centerTitle: true,
           actions: [
-            IconButton(
-                icon: const Icon(
-                  Icons.logout,
-                  color: Colors.grey,
-                ),
-                onPressed: () async {
-                  UserPreference userPreference = UserPreference();
-                  await userPreference.removeLoginInfo();
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, PoliceLoginpage.routeName, (route) => false);
-                }),
-            IconButton(
-                padding: const EdgeInsets.only(right: 10),
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.menu,
-                  color: kIconColor,
-                  size: 30,
-                ))
+            
+            Builder(
+              builder: (context) {
+                return IconButton(
+                    padding: const EdgeInsets.only(right: 10),
+                    onPressed: () {
+                      debugPrint('Open Navigator');
+                      Scaffold.of(context).openEndDrawer();
+                    },
+                    icon: const Icon(
+                      Icons.menu,
+                      color: kIconColor,
+                      size: 30,
+                    ));
+              }
+            )
           ],
           bottom: _currentIndex == 0
               ? const TabBar(
@@ -176,6 +162,7 @@ class _PoliceHomepageState extends State<PoliceHomepage> {
                 )
               : null,
         ),
+        endDrawer: const HomeDrawer(), 
         body: _buildHomeBody(_currentIndex),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,

@@ -68,6 +68,7 @@ dependencies:
   just_audio: ^0.9.24
   geolocator: ^8.2.1
   geocoding: ^2.0.4
+  flutter_polyline_points: ^1.0.0
 
 dev_dependencies:
   flutter_test:

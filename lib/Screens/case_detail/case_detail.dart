@@ -24,6 +24,7 @@ class _CaseDetailState extends State<CaseDetail> {
     _audioPlayer.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +51,9 @@ class _CaseDetailState extends State<CaseDetail> {
               ),
             )
           ]),
-      body: SingleChildScrollView(
+      body: widget.policeCase.evidence == null? const Center(
+        child: Text('No Evidence found'),
+      ): SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -113,7 +116,7 @@ class _CaseDetailState extends State<CaseDetail> {
                     ],
                   ),
                   _buildImage(widget.policeCase.evidence!.attachment!.images!),
-                   const SizedBox(
+                  const SizedBox(
                     height: 20.0,
                   ),
                   Row(
@@ -125,7 +128,7 @@ class _CaseDetailState extends State<CaseDetail> {
                       ),
                     ],
                   ),
-                   const SizedBox(
+                  const SizedBox(
                     height: 10.0,
                   ),
                   _buildAudio(widget.policeCase.evidence!.attachment!.voices!),
@@ -142,97 +145,148 @@ class _CaseDetailState extends State<CaseDetail> {
     );
   }
 
+  int _currentVideoIndex = 0;
   Widget _buildVideos(List<Media> data) {
     return SizedBox(
-        height: 200,
+        height: 205,
         width: double.infinity,
-        child: CarouselSlider(
-            options: CarouselOptions(
-                height: 200.0,
-                autoPlay: true,
-                viewportFraction: 1,
-                onPageChanged: (index, reason) {}),
-            items: data.map((media) {
-              return Builder(builder: (context) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pushNamed(CustomVideoPlayer.routeName,
-                        arguments: media.url);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0)),
-                    child: Stack(children: [
-                      Container(
-                        height: 200,
-                        width: double.infinity,
-                        child: CustomCachedNetworkImage(
-                            url: media.url.toString(),
-                            borderRadius: BorderRadius.circular(10.0),
-                            placeholder:
-                                'assets/images/police_image_three.jpeg',
-                            boxFit: BoxFit.fill,
-                            width: double.infinity,
-                            height: 250),
+        child: Column(
+          children: [
+            CarouselSlider(
+              
+                options: CarouselOptions(
+                    height: 200.0,
+                    autoPlay: true,
+                    viewportFraction: 1,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        _currentVideoIndex = data[index].id!;
+                      });
+                    }),
+                items: data.map((media) {
+                  return Builder(builder: (context) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                            CustomVideoPlayer.routeName,
+                            arguments: media.url);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(10.0),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20.0)),
+                        child: Stack(children: [
+                          Container(
+                            height: 200,
+                            width: double.infinity,
+                            child: CustomCachedNetworkImage(
+                                url: media.url.toString(),
+                                borderRadius: BorderRadius.circular(10.0),
+                                placeholder:
+                                    'assets/images/police_image_three.jpeg',
+                                boxFit: BoxFit.fill,
+                                width: double.infinity,
+                                height: 250),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20.0)),
+                          ),
+                          const Align(
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.play_circle_outline,
+                              color: Colors.white,
+                              size: 60.0,
+                            ),
+                          )
+                        ]),
                       ),
-                      const Align(
-                        alignment: Alignment.center,
-                        child: Icon(
-                          Icons.play_circle_outline,
-                          color: Colors.white,
-                          size: 60.0,
+                    );
+                  });
+                }).toList()),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: data
+                  .map((item) => Expanded(
+                        child: Container(
+                          height: _currentVideoIndex == item.id ? 5 : 2,
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                      )
-                    ]),
-                  ),
-                );
-              });
-            }).toList()));
+                      ))
+                  .toList(),
+            ),
+          ],
+        ));
   }
 
+  int _currentImageIndex = 0;
   Widget _buildImage(List<Media> data) {
     return SizedBox(
-        height: 200,
+        height: 205,
         width: double.infinity,
-        child: CarouselSlider(
-            options: CarouselOptions(
-                height: 200.0,
-                autoPlay: true,
-                viewportFraction: 1,
-                onPageChanged: (index, reason) {}),
-            items: data.map((media) {
-              return Builder(builder: (context) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pushNamed(ImageViewerWidget.routeName,
-                        arguments: media.url);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0)),
-                    child: Stack(children: [
-                      Container(
-                        height: 200,
-                        width: double.infinity,
-                        child: CustomCachedNetworkImage(
-                            url: media.url.toString(),
-                            borderRadius: BorderRadius.circular(10.0),
-                            placeholder: 'assets/images/police_image_one.jpg',
-                            boxFit: BoxFit.fill,
-                            width: double.infinity,
-                            height: 250),
+        child: Column(
+          children: [
+            CarouselSlider(
+                options: CarouselOptions(
+                    height: 200.0,
+                    autoPlay: true,
+                    viewportFraction: 1,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        _currentImageIndex = data[index].id!;
+                      });
+                    }),
+                items: data.map((media) {
+                  return Builder(builder: (context) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                            ImageViewerWidget.routeName,
+                            arguments: media.url);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(10.0),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20.0)),
+                        child: Stack(children: [
+                          Container(
+                            height: 200,
+                            width: double.infinity,
+                            child: CustomCachedNetworkImage(
+                              url: media.url.toString(),
+                              borderRadius: BorderRadius.circular(10.0),
+                              placeholder: 'assets/images/police_image_one.jpg',
+                              boxFit: BoxFit.contain,
+                              width: double.infinity,
+                              height: 250,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                          ),
+                        ]),
                       ),
-                    ]),
-                  ),
-                );
-              });
-            }).toList()));
+                    );
+                  });
+                }).toList()),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: data
+                  .map((item) => Expanded(
+                        child: Container(
+                          height: _currentImageIndex == item.id ? 5 : 2,
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ))
+                  .toList(),
+            ),
+          ],
+        ));
   }
 
   Widget _buildAudio(List<Media> data) {
@@ -257,9 +311,8 @@ class _CaseDetailState extends State<CaseDetail> {
                         Row(
                           children: [
                             IconButton(
-                              onPressed: () async{
+                              onPressed: () async {
                                 await _audioPlayer.setVolume(1.0);
-
                               },
                               icon: const Icon(
                                 Icons.volume_up,
@@ -271,20 +324,20 @@ class _CaseDetailState extends State<CaseDetail> {
                         ),
                         IconButton(
                             onPressed: () async {
-                               setState(() {
-                                
-                              });
-                              if(_audioPlayer.playing){
+                              setState(() {});
+                              if (_audioPlayer.playing) {
                                 await _audioPlayer.pause();
-                              }else{
-                                await _audioPlayer.setUrl(media.url!, preload: false);
+                              } else {
+                                await _audioPlayer.setUrl(media.url!,
+                                    preload: false);
                                 await _audioPlayer.load();
                                 await _audioPlayer.play();
                               }
-                             
                             },
-                            icon:  Icon(
-                              _audioPlayer.playing? Icons.play_arrow: Icons.pause,
+                            icon: Icon(
+                              _audioPlayer.playing
+                                  ? Icons.play_arrow
+                                  : Icons.pause,
                               color: Colors.pink,
                             ))
                       ],
