@@ -44,9 +44,15 @@ class InvetagatePage extends StatelessWidget {
                                         size: 50.0,
                                         color: Colors.grey.shade700,
                                       ))
-                                  : Image.network(
-                                      _criminal.images!.first.url!,
+                                  : Container(
+                                    decoration: BoxDecoration(
+                                      
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage(_criminal.images!.first.url!)
+                                      )
                                     ),
+                                  ),
                             ),
                             Text(
                                 '${_criminal.firstName} ${_criminal.lastName}'),

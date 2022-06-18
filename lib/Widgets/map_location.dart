@@ -5,7 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wesafepoliceapp/Models/models.dart' as locations;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-
+import 'package:wesafepoliceapp/api/const.dart';
 class MapLocaton extends StatefulWidget {
   static const routeName = 'wesafepoliceapp/maplocation';
   const MapLocaton({required this.height, required this.latLng, Key? key})
@@ -465,8 +465,4 @@ class _MapLocatonState extends State<MapLocaton> {
       ),
     );
   }
-}
-
-class Secrets {
-  static const API_KEY = "AIzaSyAVs1Or9tJy63vDEsg-K-1ktmVdPfrkrXA";
 }
