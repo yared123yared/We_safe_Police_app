@@ -1,5 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hadis.wesafepolice">
+     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+     <!-- Always include this permission -->
+     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+     <uses-permission android:name="android.permission.CAMERA"/>
+
+
    <application
         android:label="wesafepoliceapp"
         android:name="${applicationName}"
@@ -30,5 +36,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+         <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyAVs1Or9tJy63vDEsg-K-1ktmVdPfrkrXA"/>
     </application>
 </manifest>

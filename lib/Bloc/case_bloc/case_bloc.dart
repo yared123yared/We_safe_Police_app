@@ -45,7 +45,9 @@ class CaseBloc extends Bloc<CaseEvent, CaseState> {
         );
       emit(CaseLoaded([_response]));
       
-    } catch (e) {
+    } catch (e, stackTrace) {
+      print(stackTrace);
+      print('The erorr is ${e.toString()}');
       throw Exception(e.toString());
     }
   }

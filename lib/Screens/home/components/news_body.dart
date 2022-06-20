@@ -16,6 +16,7 @@ class HomeNews extends StatefulWidget {
 
 class _HomeNewsState extends State<HomeNews> {
   int _currentIndex = 0;
+  
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NewsBloc, NewsState>(

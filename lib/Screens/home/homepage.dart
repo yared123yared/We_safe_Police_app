@@ -107,9 +107,8 @@ class _PoliceHomepageState extends State<PoliceHomepage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 2,
       child: Scaffold(
-        
         backgroundColor:
             _currentIndex == 2 ? Colors.white : const Color(0xffede8e8),
         appBar: AppBar(
@@ -150,14 +149,7 @@ class _PoliceHomepageState extends State<PoliceHomepage> {
                         style: TextStyle(color: kIconColor),
                       ),
                     ),
-                    Tab(
-                      child:
-                          Text('Feature', style: TextStyle(color: kIconColor)),
-                    ),
-                    Tab(
-                      child:
-                          Text('Example', style: TextStyle(color: kIconColor)),
-                    ),
+                   
                   ],
                 )
               : null,
