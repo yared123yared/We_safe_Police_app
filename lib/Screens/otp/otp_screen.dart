@@ -62,7 +62,7 @@ class _PhoneVerificationState extends State<PhoneVerification> {
       body: BlocListener<SendOtpBlocBloc, SendOtpBlocState>(
           listener: (context, state) {
         if (state is PhoneAuthVerified) {
-          WidgetsBinding.instance!.addPostFrameCallback((_) async {
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
             showDialog(
               context: context,
               barrierDismissible: false,

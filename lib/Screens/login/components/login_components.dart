@@ -80,7 +80,7 @@ class LoginComponents {
               onPressed: () {
                 formKey.currentState!.save();
                 if (formKey.currentState!.validate()) {
-                  SchedulerBinding.instance!.addPostFrameCallback((_) {
+                  SchedulerBinding.instance.addPostFrameCallback((_) {
                     LoginEvent _loginEvent = LoginSubmitted(
                       password: passwordController.text,
                       phone: phoneController.text,

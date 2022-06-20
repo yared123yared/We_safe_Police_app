@@ -69,6 +69,8 @@ dependencies:
   geolocator: ^8.2.1
   geocoding: ^2.0.4
   flutter_polyline_points: ^1.0.0
+  signalr_client: ^0.1.2
+  flutter_webrtc: ^0.8.9
 
 dev_dependencies:
   flutter_test:
@@ -80,7 +82,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
-  build_runner: ^2.1.10
+  # build_runner: ^2.1.10
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

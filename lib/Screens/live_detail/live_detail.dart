@@ -7,7 +7,7 @@ import 'package:wesafepoliceapp/Widgets/widgets.dart';
 class LiveDetail extends StatefulWidget {
   static const routeName = 'wesafepoliceapp/livedetail';
   const LiveDetail({Key? key}) : super(key: key);
-
+  
   @override
   State<LiveDetail> createState() => _LiveDetailState();
 }
