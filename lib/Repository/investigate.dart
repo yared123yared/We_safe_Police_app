@@ -11,7 +11,7 @@ class InvestigateRepository{
 
     Future<List<String>> getSearchedImages(File imageFile) async {
       final _response = await dataProvider.upload(imageFile);
-      final _data = convert(_response);
+      final _data = convert(_response).sublist(0,2);
       return _data.map((image) => image.toString()).toList();
 
     }

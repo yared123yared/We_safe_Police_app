@@ -5,17 +5,20 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wesafepoliceapp/Models/models.dart' as locations;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:wesafepoliceapp/api/const.dart';
 
 class MapLocaton extends StatefulWidget {
   static const routeName = 'wesafepoliceapp/maplocation';
-  const MapLocaton({required this.height, required this.latLng, Key? key})
+  const MapLocaton({
+    required this.height, required this.latLng, Key? key})
       : super(key: key);
-  final double height;
 
+  final double height;
   final LatLng latLng;
 
   @override
   State<MapLocaton> createState() => _MapLocatonState();
+
 }
 
 class _MapLocatonState extends State<MapLocaton> {
@@ -23,6 +26,7 @@ class _MapLocatonState extends State<MapLocaton> {
   late GoogleMapController mapController;
   late LatLng _center;
 
+  
   Set<Marker> markers = {};
 
   String _currentAddress = '';
@@ -30,7 +34,7 @@ class _MapLocatonState extends State<MapLocaton> {
   late Position _currentPosition;
 
   // Object for PolylinePoints
-   PolylinePoints polylinePoints =  PolylinePoints();
+  PolylinePoints polylinePoints = PolylinePoints();
 
 // List of coordinates to join
   List<LatLng> polylineCoordinates = [];
@@ -38,8 +42,6 @@ class _MapLocatonState extends State<MapLocaton> {
   String _startAddress = '';
   String _destinationAddress = '';
   String? _placeDistance;
-
-  
 
 // Map storing polylines created by connecting two points
   Map<PolylineId, Polyline> polylines = {};
@@ -65,7 +67,6 @@ class _MapLocatonState extends State<MapLocaton> {
     double destinationLatitude,
     double destinationLongitude,
   ) async {
-
     // Generating the list of coordinates to be used for
     // drawing the polylines
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
@@ -74,7 +75,6 @@ class _MapLocatonState extends State<MapLocaton> {
       PointLatLng(destinationLatitude, destinationLongitude),
       travelMode: TravelMode.driving,
     );
-
     // Adding the coordinates to the list
     if (result.points.isNotEmpty) {
       for (var point in result.points) {
@@ -89,29 +89,51 @@ class _MapLocatonState extends State<MapLocaton> {
 
     // Initializing Polyline
     Polyline polyline = Polyline(
-      polylineId: id,
-      color: Colors.red,
-      points: polylineCoordinates,
-      width: 3,
-      visible: true
-    );
+        polylineId: id,
+        color: Colors.red,
+        points: polylineCoordinates,
+        width: 3,
+        visible: true);
 
     // Adding the polyline to the map
     polylines[id] = polyline;
   }
 
   // Method for retrieving the current location
-
   _getCurrentLocation() async {
     LocationPermission _permission = await Geolocator.checkPermission();
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-        .then((Position position) async {
-      setState(() {
-        // Store the position in the variable
-        _currentPosition = position;
-      });
-      await _getAddress();
-    }).catchError((e) {});
+    debugPrint('++++++++++++++++++++++++++++++++++++++++++++++++++++The app permission status is ${_permission}');
+    if (_permission == LocationPermission.denied ||
+        _permission == LocationPermission.deniedForever) {
+      _permission = await Geolocator.requestPermission();
+      if (_permission == LocationPermission.denied ||
+          _permission == LocationPermission.deniedForever) {
+        debugPrint('Permision denied');
+      } else if (_permission == LocationPermission.always || _permission == LocationPermission.whileInUse ) {
+        debugPrint("++++++++++getting current locaition");
+        await Geolocator.getCurrentPosition(
+                desiredAccuracy: LocationAccuracy.best)
+            .then((Position position) async {
+          setState(() {
+            // Store the position in the variable
+            _currentPosition = position;
+          });
+          await _getAddress();
+        }).catchError((e) {});
+      }
+    } else if(_permission == LocationPermission.whileInUse || _permission == LocationPermission.always){
+              debugPrint("++++++++++getting current locaition");
+
+      await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.best)
+          .then((Position position) async {
+        setState(() {
+          // Store the position in the variable
+          _currentPosition = position;
+        });
+        await _getAddress();
+      }).catchError((e) {});
+    }
   }
 
 // Method for retrieving the address
@@ -144,6 +166,7 @@ class _MapLocatonState extends State<MapLocaton> {
         final marker = Marker(
           markerId: MarkerId(office.name),
           position: _center,
+          
           infoWindow: InfoWindow(
             title: office.name,
             snippet: office.address,
@@ -286,8 +309,6 @@ class _MapLocatonState extends State<MapLocaton> {
 
   @override
   Widget build(BuildContext context) {
-    
-
     return SizedBox(
       height: widget.height,
       width: double.infinity,
@@ -465,8 +486,4 @@ class _MapLocatonState extends State<MapLocaton> {
       ),
     );
   }
-}
-
-class Secrets {
-  static const API_KEY = "AIzaSyAVs1Or9tJy63vDEsg-K-1ktmVdPfrkrXA";
 }

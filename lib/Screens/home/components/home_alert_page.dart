@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:wesafepoliceapp/Bloc/user_alert_bloc/useralert_bloc.dart';
+import 'package:wesafepoliceapp/Models/alert_model.dart';
 import 'package:wesafepoliceapp/Screens/live_detail/map_detail.dart';
-import 'package:wesafepoliceapp/Screens/screens.dart';
 
 class HomeReport extends StatefulWidget {
   const HomeReport({Key? key}) : super(key: key);
@@ -13,41 +15,58 @@ class HomeReport extends StatefulWidget {
 class _HomeReportState extends State<HomeReport> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Recent Alerts",
-                style: TextStyle(color: Colors.grey),
-              ),
-              Row(
-                children: const [
-                  Icon(
-                    Icons.filter_alt_rounded,
-                    color: Colors.pink,
-                  ),
-                  Text('Filter')
-                ],
-              )
-            ],
-          ),
-        ),
-        GestureDetector(
-          onTap: (){
-            Navigator.of(context).pushNamed(MapDetail.routeName, arguments: const LatLng(8.980603, 38.757759));
-          },
-          child: _buildNamesNames(),
-          ),
-        _buildNamesNames(),
-        _buildNamesNames(),
-      ],
+    return BlocProvider(
+      create: (context) => UseralertBloc()..add(GetUserALert()),
+      child: BlocBuilder<UseralertBloc, UseralertState>(
+        builder: (context, state) {
+          if (state is UseralertInitial || state is UserAlertLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is UserAlertError) {
+            return Text(state.message);
+          }
+
+          UserAlertLoaded alertLoaded = state as UserAlertLoaded;
+          return ListView(
+            children: alertLoaded.userAlerts
+                .map((alert) => GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(MapDetail.routeName,
+                            arguments:  LatLng(alert.latitude!, alert.longtiude!));
+                      },
+                      child: _buildNamesNames(alert),
+                    ))
+                .toList()
+            // Padding(
+            //   padding: const EdgeInsets.all(20.0),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       const Text(
+            //         "Recent Alerts",
+            //         style: TextStyle(color: Colors.grey),
+            //       ),
+            //       Row(
+            //         children: const [
+            //           Icon(
+            //             Icons.filter_alt_rounded,
+            //             color: Colors.pink,
+            //           ),
+            //           Text('Filter')
+            //         ],
+            //       )
+            //     ],
+            //   ),
+            // ),
+            ,
+          );
+        },
+      ),
     );
   }
-  Widget _buildNamesNames() {
+
+  Widget _buildNamesNames(UserAlert alert) {
     return Container(
       color: Colors.white,
       margin: const EdgeInsets.only(
@@ -72,30 +91,26 @@ class _HomeReportState extends State<HomeReport> {
                         children: [
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
+                              // Container(
+                              //   width: double.infinity,
+                              //   height:120,
+                              //   decoration: BoxDecoration(
+                              //     image: DecorationImage(
+                              //         fit: BoxFit.cover,
+                              //         image: NetworkImage(alert
+                              //             .alertedBy!.person!.picture
+                              //             .toString())),
+                              //   ),
+                              // ),
                               Text(
-                                'Lorem Ipsum is',
-                                style: TextStyle(
+                                '${alert.alertedBy!.person!.firstName} ${alert.alertedBy!.person!.lastName}',
+                                style: const TextStyle(
                                     height: 1.5,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18.0,
                                     color: Color(0xff494848)),
                               ),
-                              Text(
-                                'dummy text of printing',
-                                style: TextStyle(
-                                  height: 1.5,
-                                  color: Color(0xff797070),
-                                ),
-                              ),
-                              Text(
-                                'Dec 22,2022',
-                                style: TextStyle(
-                                  height: 1.5,
-                                  fontSize: 11,
-                                  color: Color(0xff797070),
-                                ),
-                              )
                             ],
                           ),
                         ],

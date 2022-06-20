@@ -257,14 +257,12 @@ class CaseEvidenceAddState extends State<CaseEvidenceAdd> {
                   child: ElevatedButton(
                     onPressed: () async {
                       _formKey.currentState!.save();
-                      debugPrint('Voice file is ${voiceFile!.path}');
-                      debugPrint('video file is ${videoFile!.path}');
-                      debugPrint('image file is ${imageFile!.path}');
+                     
                       BlocProvider.of<CaseBloc>(context).add(UpdateCase(
                           caseModel: widget.caseModel,
-                          voicePath: voiceFile!.path,
-                          videoPath: videoFile!.path,
-                          imagePath: imageFile!.path,
+                          voicePath: voiceFile != null?  voiceFile!.path :'',
+                          videoPath: videoFile != null? videoFile!.path : '',
+                          imagePath: imageFile != null? imageFile!.path : '',
                           description: _description));
                     },
                     child: const Text('Submit'),

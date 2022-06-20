@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:wesafepoliceapp/Config/user_preference.dart';
 import 'package:wesafepoliceapp/Models/models.dart';
 import 'package:wesafepoliceapp/Repository/firebase_storage.dart';
 
@@ -16,8 +17,8 @@ class CaseDataProvider {
   // get all cases;
 
   Future<dynamic> getAssignedPoliceCases() async {
-    // UserPreference _userPreference = UserPreference();
-    // final _preferenceData = _userPreference.getLoginInformation();
+    UserPreference _userPreference = UserPreference();
+    final _preferenceData = await _userPreference.getLoginInformation();
     late dynamic _jsonResponse;
     try {
       final _response = await httpClient.get(
@@ -41,20 +42,22 @@ class CaseDataProvider {
     String _imagePath = '';
     String _videoPath = '';
     String _voicePath = '';
+
+    if (imagePath != '') {
+      _imagePath = await _firebaseStorageClass.addFile(imagePath!, 'images');
+    }
+    if (videoPath != '') {
+      _videoPath = await _firebaseStorageClass.addFile(videoPath!, 'videos');
+    }
+    if (voicePath != '') {
+      _voicePath = await _firebaseStorageClass.addFile(voicePath!, 'voices');
+    }
+
     String _description = caseModel.evidence!.description!;
 
     try {
-      if (imagePath != '') {
-        _imagePath = await _firebaseStorageClass.addFile(imagePath!, 'images');
-      }
-      if (videoPath != '') {
-        _videoPath = await _firebaseStorageClass.addFile(videoPath!, 'videos');
-      }
-      if (videoPath != '') {
-        _voicePath = await _firebaseStorageClass.addFile(voicePath!, 'voices');
-      }
       if (discription != '') {
-        _description = discription!;
+        _description = '$_description $discription!  ';
       }
 
       Attachment _attachment = caseModel.evidence!.attachment!;
@@ -73,7 +76,8 @@ class CaseDataProvider {
       if (_voicePath != '') {
         _voiceMedia.add(Media(url: _voicePath));
       }
-      Attachment _copiedAttachement = _attachment.copyWith(
+      Attachment _copiedAttachement = Attachment(
+        id: _attachment.id,
         images: _imagesMedia,
         videos: _videoMedia,
         voices: _voiceMedia,
@@ -84,7 +88,8 @@ class CaseDataProvider {
       Case _case = caseModel.copyWith(evidence: _evidence);
 
       final _response = await httpClient.put(
-          Uri.parse('https://we-safe-development.herokuapp.com/api/case/${caseModel.id}'),
+          Uri.parse(
+              'https://we-safe-development.herokuapp.com/api/case/${caseModel.id}'),
           headers: <String, String>{'Content-Type': 'application/json'},
           body: jsonEncode(_case.toJson()));
       _jsonRespnse = returnResponse(_response);
