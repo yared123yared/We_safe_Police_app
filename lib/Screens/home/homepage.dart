@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:wesafepoliceapp/Config/user_preference.dart';
 import 'package:wesafepoliceapp/Screens/home/components/home_case.dart';
 import 'package:wesafepoliceapp/Screens/home/components/home_drawer.dart';
 import 'package:wesafepoliceapp/Screens/home/components/home_live_page.dart';
 import 'package:wesafepoliceapp/Screens/home/components/home_alert_page.dart';
 import 'package:wesafepoliceapp/Screens/home/components/investigate.dart';
 import 'package:wesafepoliceapp/Screens/home/components/news_body.dart';
-import 'package:wesafepoliceapp/Screens/login/login_screen.dart';
-import 'package:wesafepoliceapp/Screens/resetpassword/reset_passowrd.dart';
+import 'package:wesafepoliceapp/Screens/home/components/news_by_location.dart';
 import 'package:wesafepoliceapp/Utils/utils.dart';
 
 class PoliceHomepage extends StatefulWidget {
@@ -39,7 +37,11 @@ class _PoliceHomepageState extends State<PoliceHomepage> {
   Widget _buildHomeBody(int index) {
     switch (index) {
       case 0:
-        return const HomeNews();
+        return const TabBarView(children:  [
+            HomeNews(),
+            NewsByLocation()
+           
+        ]);
       case 1:
         return const HomeLive();
       case 2:
@@ -108,6 +110,7 @@ class _PoliceHomepageState extends State<PoliceHomepage> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
+
       child: Scaffold(
         backgroundColor:
             _currentIndex == 2 ? Colors.white : const Color(0xffede8e8),
@@ -145,7 +148,7 @@ class _PoliceHomepageState extends State<PoliceHomepage> {
                     ),
                     Tab(
                       child: Text(
-                        'New',
+                        'Nearby',
                         style: TextStyle(color: kIconColor),
                       ),
                     ),
