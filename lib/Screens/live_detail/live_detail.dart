@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:wesafepoliceapp/Models/userModel.dart';
+import 'package:wesafepoliceapp/Screens/home/components/call.dart';
 import 'package:wesafepoliceapp/Screens/live_detail/map_detail.dart';
 import 'package:wesafepoliceapp/Widgets/map_location.dart';
 import 'package:wesafepoliceapp/Widgets/widgets.dart';
 
 class LiveDetail extends StatefulWidget {
   static const routeName = 'wesafepoliceapp/livedetail';
-  const LiveDetail({Key? key}) : super(key: key);
-  
+  final UserInfo connectedUser;
+  const LiveDetail({Key? key, required this.connectedUser}) : super(key: key);
+
   @override
   State<LiveDetail> createState() => _LiveDetailState();
 }
@@ -72,7 +75,8 @@ class _LiveDetailState extends State<LiveDetail> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).pushNamed(MapDetail.routeName,arguments: const LatLng(8.980603, 38.757759));
+                      Navigator.of(context).pushNamed(MapDetail.routeName,
+                          arguments: const LatLng(8.980603, 38.757759));
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -91,6 +95,17 @@ class _LiveDetailState extends State<LiveDetail> {
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MakeCallPage(
+                        onlineUser: widget.connectedUser,
+                      )));
+        },
+        child: const Icon(Icons.phone),
       ),
     );
   }

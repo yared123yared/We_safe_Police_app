@@ -4,6 +4,7 @@ import 'package:path/path.dart';
 import 'package:wesafepoliceapp/Models/case.dart';
 import 'package:wesafepoliceapp/Models/login_info.dart';
 import 'package:wesafepoliceapp/Models/new_model.dart';
+import 'package:wesafepoliceapp/Models/userModel.dart';
 import 'package:wesafepoliceapp/Screens/case_detail/case_evidence_add.dart';
 import 'package:wesafepoliceapp/Screens/home/components/profile_page.dart';
 import 'package:wesafepoliceapp/Screens/live_detail/map_detail.dart';
@@ -33,11 +34,17 @@ class AppRoute {
     } else if (settings.name == ALertDetail.routeName) {
       return MaterialPageRoute(builder: ((context) => const ALertDetail()));
     } else if (settings.name == LiveDetail.routeName) {
-      return MaterialPageRoute(builder: (context) => const LiveDetail());
+      final argument = settings.arguments as UserInfo;
+      return MaterialPageRoute(
+          builder: (context) =>  LiveDetail(
+                connectedUser: argument,
+              ));
     } else if (settings.name == MapDetail.routeName) {
       final LatLng latLng = settings.arguments as LatLng;
-      return MaterialPageRoute(builder: (context) =>  MapDetail(latLng: latLng,));
-
+      return MaterialPageRoute(
+          builder: (context) => MapDetail(
+                latLng: latLng,
+              ));
     } else if (settings.name == CaseDetail.routeName) {
       final _policeCase = settings.arguments as Case;
       return MaterialPageRoute(
@@ -61,18 +68,20 @@ class AppRoute {
       return MaterialPageRoute(
         builder: (context) => const SearchImage(),
       );
-    }else if(settings.name == CustomVideoPlayer.routeName){
+    } else if (settings.name == CustomVideoPlayer.routeName) {
       final _videoUrl = settings.arguments as String;
-      return MaterialPageRoute(builder: (context) => CustomVideoPlayer(url: _videoUrl));
-    }else if(settings.name == ImageViewerWidget.routeName){
+      return MaterialPageRoute(
+          builder: (context) => CustomVideoPlayer(url: _videoUrl));
+    } else if (settings.name == ImageViewerWidget.routeName) {
       final _imageUrl = settings.arguments as String;
-      return MaterialPageRoute(builder: (context) => ImageViewerWidget(imageUrl: _imageUrl));
-    } else if(settings.name == ProfilePage.routeName){
+      return MaterialPageRoute(
+          builder: (context) => ImageViewerWidget(imageUrl: _imageUrl));
+    } else if (settings.name == ProfilePage.routeName) {
       final _logiInfo = settings.arguments as LoginInfo;
-      return MaterialPageRoute(builder: ((context) =>  ProfilePage(
-        loginInfo: _logiInfo,
-      )));
-
+      return MaterialPageRoute(
+          builder: ((context) => ProfilePage(
+                loginInfo: _logiInfo,
+              )));
     }
     return MaterialPageRoute(builder: (context) => const PoliceLoginpage());
   }

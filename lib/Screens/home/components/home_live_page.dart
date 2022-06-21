@@ -54,50 +54,71 @@ class _HomeLiveState extends State<HomeLive> {
   }
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: Colors.white,
-        padding: const EdgeInsets.symmetric(
-          vertical: 20.0,
-          horizontal: 20.0,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Currently Live',
-              style: TextStyle(fontSize: 18.0),
-            ),
-            const SizedBox(
-              height: 20.0,
-            ),
-            GridView.builder(
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 200,
-                    childAspectRatio: 1,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10),
-                itemCount: connectedUser.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap:(){
-                      Navigator.of(context).pushNamed(LiveDetail.routeName, arguments: const LatLng(8.980603, 38.757759));
-                    },
-                    child: Column(
-                      children: [
-                        Text(connectedUser[index].userName.toString(), style:const TextStyle(
-                          color: Colors.green
-                        ),),
-                        const SizedBox(height: 3,),
-                        LiveImage(
-                          image: _images[index],
-                          height: 250,
-                        ),
-                      ],
-                    )
-                  );
-                })
-          ],
-        ));
+    return Scaffold(
+      body: Container(
+          color: Colors.white,
+          padding: const EdgeInsets.symmetric(
+            vertical: 20.0,
+            horizontal: 20.0,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Currently Live',
+                style: TextStyle(fontSize: 18.0),
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+              GridView.builder(
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200,
+                      childAspectRatio: 1,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10),
+                  itemCount: connectedUser.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap:(){
+                        Navigator.of(context).pushNamed(LiveDetail.routeName, arguments: connectedUser[index]);
+                      },
+                      child: Column(
+                        children: [
+                          Text(connectedUser[index].userName.toString(), style:const TextStyle(
+                            color: Colors.green
+                          ),),
+                          const SizedBox(height: 3,),
+                          LiveImage(
+                            image: _images[0],
+                            height: 150,
+                          ),
+                        ],
+                      )
+                    );
+                  })
+            ],
+          ),
+          
+          ),
+           floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            hubConnection.state == HubConnectionState.Disconnected
+                ? await hubConnection.start()
+                : await hubConnection.stop();
+
+            setState(() {
+              print(hubConnection.state == HubConnectionState.Disconnected
+                  ? 'Stop'
+                  : 'Start');
+            });
+          },
+          tooltip: 'Start/Stop',
+          child: hubConnection.state == HubConnectionState.Disconnected
+              ? const Icon(Icons.play_arrow)
+              : const Icon(Icons
+                  .stop)), 
+    );
   }
 }

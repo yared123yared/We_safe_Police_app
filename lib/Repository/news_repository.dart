@@ -13,4 +13,16 @@ class NewsRespository{
 
     return _jsonResponse.map((newsJson) => NewsModel.fromJson(newsJson)).toList();
   }
+
+  // Fetch all news avalable
+  Future<List<NewsModel>> fetchAllNewsByLocation() async{
+    
+    final _jsonResponse = await dataProvider.fetchAllNewsByLocation() as List;
+    print('+++++++++++++++++++++++++++++++++++++++NEWS+++++++++++++++++++++++');
+    print(_jsonResponse);
+    return _jsonResponse.map((newsJson) => NewsModel.fromJson(newsJson)).toList();
+
+  }
+
+
 }

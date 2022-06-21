@@ -9,3 +9,7 @@ abstract class NewsEvent extends Equatable {
 
 
 class FetchNews extends NewsEvent{}
+
+class FetchNewByLocation extends NewsEvent{
+  
+}

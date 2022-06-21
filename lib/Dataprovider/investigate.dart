@@ -25,7 +25,7 @@ class InvestigateDataProvider {
     var length = await imageFile.length();
 
     // string to uri
-    var uri = Uri.parse("http://192.168.183.86:8000/file/upload/");
+    var uri = Uri.parse("http://192.168.124.86:8000/file/upload/");
 
     // create multipart request
     var request = http.MultipartRequest("POST", uri);

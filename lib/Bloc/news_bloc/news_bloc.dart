@@ -12,6 +12,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
     required this.respository,
   }) : super(NewsInitial()) {
     on<FetchNews>(_mapFetchNewsEvent);
+    on<FetchNewByLocation>(_mapFetchNewsByLocation);
   }
 
   void _mapFetchNewsEvent(FetchNews event, Emitter<NewsState> emit) async{
@@ -24,6 +25,18 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
     } catch (e) {
       emit(NewsError(e.toString()));
       
+    }
+  }
+
+  void _mapFetchNewsByLocation(FetchNewByLocation event, Emitter<NewsState> emit) async{
+    emit(NewsLocationLoading());
+
+    try {
+      final _response = await respository.fetchAllNewsByLocation();
+      emit(NewsLocationLoaded(newsDatas: _response));
+    } catch (e, stackTrace) {
+      print('The stacktrace $stackTrace');
+      emit(NewsLocationError(e.toString()));
     }
   }
 }
